@@ -1,6 +1,6 @@
-#Path-Finding-Microsoft-Project-Team-Phoenix
+# Path-Finding-Microsoft-Project-Team-Phoenix
 
-##Instructions to setup
+## Instructions to setup
 Followed: `https://blog.miguelgrinberg.com/post/how-to-create-a-react--flask-project`
 
 - Install the dependencies mentioned at the top of the page.
