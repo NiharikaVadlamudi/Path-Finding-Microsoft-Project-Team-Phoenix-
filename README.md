@@ -3,7 +3,11 @@
 ## Instructions to setup
 Followed: `https://blog.miguelgrinberg.com/post/how-to-create-a-react--flask-project`
 
-- Install the dependencies mentioned at the top of the page.
+- Install the dependencies mentioned at the top of the page:
+  -install nodejs as mentioned above
+  - run 'npm install -g yarn' for yarn
+- Check if usr/bin/npm exists
+- If it doesn't exist, try using aptitude to install npm
 - Delete the venv folder in backend
 - Run the following commands:
   - cd backend
