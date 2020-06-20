@@ -16,6 +16,7 @@ Followed: `https://blog.miguelgrinberg.com/post/how-to-create-a-react--flask-pro
   - pip install flask python-dotenv
   - flask run // check if flask is working. Ctrl+c to stop
   - cd ..
+  -yarn add node-sass
   - yarn start-back <br>
 -open another terminal in the main folder and run the following in the new terminal:
   - yarn
