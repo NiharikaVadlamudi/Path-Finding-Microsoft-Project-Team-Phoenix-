@@ -11,3 +11,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+td.wallOn{
+  background-color: #0000ff;
+}
+
+td.empty{
+  background-color: aqua;
+}
