@@ -4,7 +4,7 @@ class Board extends Component {
 
     getBoard = (rows, cols, status, clickFunc) => {
         const tr = [];
-        console.log(status[0][0])
+        // console.log(status[0][0])
         for (let r = 0; r < rows; r++) {
             const td = [];
             for (let c = 0; c < cols; c++) {
@@ -19,7 +19,7 @@ class Board extends Component {
             }
             tr.push(<tr key={r}>{td}</tr>);
         }
-        return ( 
+        return (
             <div className="container shadow-lg p-3 mb-5 rounded">
                 <div className="row justify-content-md-cente">
                     <div className="col-sm-12">

@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import Board from './Board.jsx';
 
 class Grid extends Component {
-    state = { 
+    state = {
         rows: 30,
         cols: 40,
-        status: []
+        status: [],
+        weight: []
     }
 
     constructor() {
@@ -35,16 +36,16 @@ class Grid extends Component {
         }));
     }
 
-    render() { 
-        return ( 
-            <Board 
-                rows={this.state.rows} 
-                cols={this.state.cols} 
+    render() {
+        return (
+            <Board
+                rows={this.state.rows}
+                cols={this.state.cols}
                 status={this.state.status}
                 clickFunc={this.handleCellToggle}
             />
         );
     }
 }
- 
+
 export default Grid;
