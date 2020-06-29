@@ -10,6 +10,7 @@ Followed: `https://blog.miguelgrinberg.com/post/how-to-create-a-react--flask-pro
 - If it doesn't exist, try using aptitude to install npm
 - Delete the venv folder in backend
 - Run the following commands in the terminal:
+  - git clone https://github.com/NiharikaVadlamudi/Path-Finding-Microsoft-Project-Team-Phoenix-.git
   - cd backend
   - python3 -m venv venv
   - source venv/bin/activate
