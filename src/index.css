@@ -12,10 +12,18 @@ code {
     monospace;
 }
 
-td.wallOn{
+td.wall{
   background-color: #0000ff;
 }
 
 td.empty{
   background-color: aqua;
+}
+
+td.start{
+  background-color: red;
+}
+
+td.target{
+  background-color: hotpink;
 }
