@@ -6,7 +6,7 @@ import BFS from "../Algorithms/bfs.jsx"
 
 
 class Agent extends Component {
-    state = { 
+    state = {
         algo: undefined,
         controlButton:
             {id : glob.startSearchButtonId, label:"SEARCH", status: false},
@@ -29,15 +29,18 @@ class Agent extends Component {
             if(searching){
                 // init algo and set it to step periodically
                 this.state.algo = new BFS(this.props);
-                this.periodicStep = setInterval(() => {
-                    // <INSERT CODE HERE TO EXECUTE IT 
+
+                console.log(this.state.algo.f)
+                // console.log(this.state.algo)
+                // this.periodicStep = setInterval(() => {
+                    // <INSERT CODE HERE TO EXECUTE IT
                     // PERIODICALLY WITH PERIOD this.state.period>
                     ////////////////////////////////
-                    let vis = this.state.algo.step()
-                    if(vis !== undefined)
-                        this.props.handleStep(vis);
+                    // let vis = this.state.algo.step()
+                    // if(vis !== undefined)
+                        this.props.handleStep(this.state.algo.vis);
                     ////////////////////////////////
-                }, this.state.period);
+                // }, this.state.period);
             }
             else{
                 this.state.algo = undefined
@@ -51,12 +54,12 @@ class Agent extends Component {
     }
 
     render() {
-        return ( 
+        return (
             <span>
                 <Button el={this.state.controlButton} onSelectOption={ this.handleOnOff }/>
             </span>
          );
     }
 }
- 
+
 export default Agent;
