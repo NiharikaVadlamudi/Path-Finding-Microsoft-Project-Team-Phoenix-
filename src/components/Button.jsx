@@ -7,8 +7,7 @@ class Button extends Component {
     render() {
 
         let classes = "badge m-2 badge-";
-        classes += this.props.el.status === 0 ? "warning":"primary";
-
+        classes += this.props.el.status == 0 ? "warning":"primary";
 
         return (
           <React.Fragment>

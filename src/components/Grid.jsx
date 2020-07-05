@@ -79,7 +79,7 @@ class Grid extends Component {
 
         let drawMode = -1;
         const drawButtons = this.state.drawButtons.map(c=>{
-          c.status = (element !== undefined && c.id === element.id ? drawMode=c.id : false);
+          c.status = ((element !== undefined && c.id === element.id) ? drawMode=c.id : false);
           return c;
         });
         this.setState({drawButtons, drawMode});
