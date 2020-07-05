@@ -1,14 +1,24 @@
 import React, { Component } from 'react';
+import Button from "./Button.jsx";
 import glob from './global.jsx'
+import Agent from "./Agent.jsx"
 
 class Grid extends Component {
     state = {
-        rows: 30,
+        rows: 25,
         cols: 40,
         status: [],
         weight: [],
         startLoc: undefined,
-        targetLoc: undefined
+        targetLoc: undefined,
+        drawAllowed: true,
+        drawMode: -1,
+        drawButtons: [
+            {id : glob.wallButtonId, label:"ADD WALL", status: false},
+            {id : glob.startButtonId, label:"ADD START", status:false},
+            {id : glob.targetButtonId, label:"ADD TARGET", status: false },
+            {id : glob.weightButtonId, label:"ADD WEIGHT", status: false},
+        ]
     }
 
     constructor() {
@@ -63,13 +73,27 @@ class Grid extends Component {
         );
     }
 
+    handleSelectDrawMode = (element) => {
+
+        if(!this.state.drawAllowed) return;
+
+        let drawMode = -1;
+        const drawButtons = this.state.drawButtons.map(c=>{
+          c.status = (element !== undefined && c.id === element.id ? drawMode=c.id : false);
+          return c;
+        });
+        this.setState({drawButtons, drawMode});
+      }
+
     handleCellClick = (r, c) => {
+
+        if(!this.state.drawAllowed) return;
 
         const updateStatus = (prevState) => {
             const clone = JSON.parse(JSON.stringify(prevState.status));
             let startLoc = prevState.startLoc
             let targetLoc = prevState.targetLoc
-            switch(this.props.drawMode){
+            switch(this.state.drawMode){
                 case glob.wallButtonId:
                     if(prevState.status[r][c] === glob.emptyId || prevState.status[r][c] === glob.wallId) 
                         clone[r][c] = prevState.status[r][c] ^ 1; 
@@ -115,9 +139,28 @@ class Grid extends Component {
         });
     }
 
+    handlePhaseToggle = () => {
+        this.handleSelectDrawMode(undefined);
+        const drawAllowed = !this.state.drawAllowed;
+        this.setState({drawAllowed});
+    }
+
     render() {
         return (
-            this.getBoard()
+            <React.Fragment>
+            <span>
+                {this.state.drawButtons.map(
+                    el => <Button key={el.id} el={el} onSelectOption={ this.handleSelectDrawMode }/>
+                )}
+            </span>
+            <Agent
+                handlePhaseToggle={this.handlePhaseToggle}
+                status={this.state.status}
+                beg={this.state.startLoc}
+                end={this.state.targetLoc}
+            />
+            {this.getBoard()}
+            </React.Fragment>
         );
     }
 }
