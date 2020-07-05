@@ -39,6 +39,7 @@ class Grid extends Component {
             case glob.wallId: return "wall";
             case glob.startId: return "start";
             case glob.targetId: return "target";
+            case glob.visId: return "vis";
             default: break;
         }
     }
@@ -145,21 +146,34 @@ class Grid extends Component {
         this.setState({drawAllowed});
     }
 
+    handleStep = (vis) => {
+        // console.log(vis)
+        const clone = JSON.parse(JSON.stringify(this.state.status));
+        for(let i = 0; i < this.state.rows; i++){
+            for(let j = 0; j < this.state.cols; j++){
+                if(vis[i][j] === 1 && clone[i][j] === glob.emptyId)
+                    clone[i][j] = glob.visId;
+            }
+        }
+        this.setState({status: clone})
+    }
+
     render() {
         return (
             <React.Fragment>
-            <span>
-                {this.state.drawButtons.map(
-                    el => <Button key={el.id} el={el} onSelectOption={ this.handleSelectDrawMode }/>
-                )}
-            </span>
-            <Agent
-                handlePhaseToggle={this.handlePhaseToggle}
-                status={this.state.status}
-                beg={this.state.startLoc}
-                end={this.state.targetLoc}
-            />
-            {this.getBoard()}
+                <span>
+                    {this.state.drawButtons.map(
+                        el => <Button key={el.id} el={el} onSelectOption={ this.handleSelectDrawMode }/>
+                    )}
+                </span>
+                <Agent
+                    handlePhaseToggle={this.handlePhaseToggle}
+                    handleStep={this.handleStep}
+                    status={this.state.status}
+                    beg={this.state.startLoc}
+                    end={this.state.targetLoc}
+                />
+                {this.getBoard()}
             </React.Fragment>
         );
     }

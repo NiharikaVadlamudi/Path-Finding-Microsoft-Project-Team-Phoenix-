@@ -8,6 +8,7 @@ export default {
     wallId: 1,
     startId: 2,
     targetId: 3,
+    visId: 4,
 
     bfsButtonId : 1,
     dfsButtonId : 2,

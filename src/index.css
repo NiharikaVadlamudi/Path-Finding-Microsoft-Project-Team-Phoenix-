@@ -27,3 +27,7 @@ td.start{
 td.target{
   background-color: green;
 }
+
+td.vis{
+  background-color: grey;
+}
