@@ -1,6 +1,8 @@
-import React, { Component, useEffect } from 'react';
+import React, { Component } from 'react';
 import Button from "./Button.jsx"
 import glob from "./global.jsx"
+import useInterval from 'react-useinterval';
+
 
 class Agent extends Component {
     state = { 
@@ -17,7 +19,6 @@ class Agent extends Component {
         this.setState({controlButton})
         this.props.handlePhaseToggle();
     }
-
     
 
     render() {

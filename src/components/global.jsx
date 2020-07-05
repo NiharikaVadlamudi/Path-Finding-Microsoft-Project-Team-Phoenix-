@@ -18,8 +18,3 @@ export default {
     // clearBoardButtonId : 3,
 }
 
-
-// export function returnGridState(rows,cols,status, startLoc, targetLoc)
-// {
-//   return rows, cols,status,startLoc,targetLoc;
-// }
