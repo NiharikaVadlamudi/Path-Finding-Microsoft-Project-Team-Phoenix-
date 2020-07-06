@@ -11,11 +11,13 @@ export default {
     visId: 4,
 
     bfsButtonId : 1,
-    dfsButtonId : 2,
-    astarButtonId : 3,
+    aStarButtonId : 3,
 
     searchPhaseId : 1,
     designPhaseId : -1,
     // clearBoardButtonId : 3,
-}
 
+    startStopButtonId:1,
+    pauseResumeButtonId:2,
+    clearBoardButtonId:3,
+}

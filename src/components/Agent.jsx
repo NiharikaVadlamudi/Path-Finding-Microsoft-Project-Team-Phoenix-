@@ -8,39 +8,112 @@ import BFS from "../Algorithms/bfs.jsx"
 class Agent extends Component {
     state = {
         algo: undefined,
-        controlButton:
-            {id : glob.startSearchButtonId, label:"SEARCH", status: false},
+        startStopButton: {id : glob.startSearchButtonId, label:"SEARCH", status: false},
+        pauseResumeButton: {id : glob.pauseResumeButtonId, label:"PAUSE", status: false, disable: true},
         period: 1
     }
 
-    handleOnOff = (button) => {
+    handleStartStop = (button) => {
         // do sanity checks
-        var controlButton = JSON.parse(JSON.stringify(this.state.controlButton))
-        controlButton.status = !controlButton.status
-        controlButton.label = (controlButton.status ? "STOP" : "SEARCH")
-        this.setState({controlButton})
-        this.props.handlePhaseToggle();
+        var startStopButton = JSON.parse(JSON.stringify(this.state.startStopButton));
+        if (startStopButton.status === false)
+        {
+          this.props.clearLastAlgo();
+          if(this.props.end === undefined || this.props.beg === undefined || this.props.algoSelected === -1)
+          {
+            alert("Error")
+            this.props.handleChecks();
+          }
+          else {
+            startStopButton.status = true;
+            startStopButton.label = "STOP";
+            var algo = this.props.algoSelected;
+            this.setState({startStopButton,algo})
+            this.props.handlePhaseToggle();
+            this.props.toggleIsAlgoRunning();
+            this.togglePause();
+          }
+        }
+        else {
+          startStopButton.status = false
+          startStopButton.label = "SEARCH";
+          this.props.handleResetButtons();
+          var algo = -1;
+          this.props.toggleIsAlgoRunning();
+          this.setState({startStopButton,algo});
+          this.props.handlePhaseToggle();
+        }
+    }
+
+    handlePauseResume = (button) => {
+      if(this.props.isAlgoRunning === false)
+      {
+        alert("This button is disabled rn")
+      }
+      else {
+        var pauseResumeButton = JSON.parse(JSON.stringify(this.state.pauseResumeButton));
+        pauseResumeButton.status = !pauseResumeButton.status;
+        pauseResumeButton.label = pauseResumeButton.status ? "RESUME" : "PAUSE" ;
+        this.setState({pauseResumeButton});
+      }
+    }
+
+    togglePause = () => {
+      var pauseResumeButton = JSON.parse(JSON.stringify(this.state.pauseResumeButton));
+      pauseResumeButton.disable = !pauseResumeButton.disable;
+      this.setState({pauseResumeButton});
+    }
+    pauseState = () => {
+      console.log("aaya")
+      return this.state.pauseResumeButton.status
     }
 
     componentDidUpdate(prevProps, prevState) {
         // status changed from not searching to searching
-        if(prevState.controlButton.status != this.state.controlButton.status){
-            const searching = this.state.controlButton.status
+        // console.log(this.props.isAlgoRunning)
+        if(prevState.startStopButton.status != this.state.startStopButton.status){
+            const searching = this.state.startStopButton.status;
+            var pause = this.state.pauseResumeButton.status;
             if(searching){
                 // init algo and set it to step periodically
-                this.state.algo = new BFS(this.props);
+                let algoItems = undefined
+                switch(this.state.algo)
+                {
+                  case glob.bfsButtonId: algoItems = new BFS(this.props); algoItems.orderVisted.shift(); break;
+                  default: break;
+                }
 
-                console.log(this.state.algo.f)
-                // console.log(this.state.algo)
-                // this.periodicStep = setInterval(() => {
-                    // <INSERT CODE HERE TO EXECUTE IT
-                    // PERIODICALLY WITH PERIOD this.state.period>
-                    ////////////////////////////////
-                    // let vis = this.state.algo.step()
-                    // if(vis !== undefined)
-                        this.props.handleStep(this.state.algo.vis);
-                    ////////////////////////////////
-                // }, this.state.period);
+                pause = this.state.pauseResumeButton.status;
+
+                if(algoItems !== undefined && pause === false)
+                {
+                  this.periodicStep = setInterval(() => {
+                    if(algoItems.orderVisted.length!==0  && pause === false)
+                    {
+                      pause = this.state.pauseResumeButton.status
+                      let cur = algoItems.orderVisted.shift();
+                      this.props.handleStep(cur);
+                    }
+                    if(pause === true)
+                    {
+                      pause = this.state.pauseResumeButton.status;
+
+                    }
+                    if(algoItems.orderVisted.length===0)
+                    {
+                      var startStopButton = JSON.parse(JSON.stringify(this.state.startStopButton));
+                      startStopButton.status = false;
+                      startStopButton.label = "SEARCH";
+                      this.props.handleResetButtons();
+                      var algo = -1;
+                      this.setState({startStopButton,algo});
+                      this.props.toggleIsAlgoRunning();
+                      this.props.handlePhaseToggle();
+                    }
+
+                  }, this.state.period);
+                }
+
             }
             else{
                 this.state.algo = undefined
@@ -56,7 +129,8 @@ class Agent extends Component {
     render() {
         return (
             <span>
-                <Button el={this.state.controlButton} onSelectOption={ this.handleOnOff }/>
+                <Button el={this.state.startStopButton} onSelectOption={ this.handleStartStop }/>
+                <Button el={this.state.pauseResumeButton} onSelectOption={ this.handlePauseResume }/>
             </span>
          );
     }

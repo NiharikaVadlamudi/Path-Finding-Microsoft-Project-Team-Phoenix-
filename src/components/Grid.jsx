@@ -13,12 +13,18 @@ class Grid extends Component {
         targetLoc: undefined,
         drawAllowed: true,
         drawMode: -1,
+        isAlgoRunning: false,
+        algoSelected: -1,
         drawButtons: [
-            {id : glob.wallButtonId, label:"ADD WALL", status: false},
-            {id : glob.startButtonId, label:"ADD START", status:false},
-            {id : glob.targetButtonId, label:"ADD TARGET", status: false },
-            {id : glob.weightButtonId, label:"ADD WEIGHT", status: false},
-        ]
+            {id : glob.wallButtonId, label:"ADD WALL", status: false, disable: false},
+            {id : glob.startButtonId, label:"ADD START", status:false, disable: false},
+            {id : glob.targetButtonId, label:"ADD TARGET", status: false, disable: false },
+            {id : glob.weightButtonId, label:"ADD WEIGHT", status: false, disable: false},
+        ],
+        algos : [
+          {id : glob.bfsButtonId , label:"BFS" , status: false, disable: false},
+          {id : glob.aStarButtonId , label:"A*" , status: false, disable: false},
+        ],
     }
 
     constructor() {
@@ -86,6 +92,57 @@ class Grid extends Component {
         this.setState({drawButtons, drawMode});
       }
 
+    handleSelectAlgo = (element) => {
+        let algoSelected = this.state.algoSelected;
+
+        const algos = this.state.algos.map(c=>{
+          c.status = ((element !== undefined && c.id === element.id) ? algoSelected=c.id : false);
+          return c;
+        });
+        this.setState({algos,algoSelected});
+
+      }
+
+    toggleIsAlgoRunning = () => {
+      let isAlgoRunning = this.state.isAlgoRunning;
+      isAlgoRunning = !isAlgoRunning;
+      this.setState({isAlgoRunning});
+
+    }
+
+    handleChecks = () => {
+        let drawMode = this.state.drawMode;
+        drawMode = -1;
+        let drawAllowed = this.state.drawAllowed;
+        drawAllowed = true;
+        const drawButtons = this.state.drawButtons.map(c=>{
+          c.status = false;
+          return c;
+        });
+        this.setState({drawMode, drawAllowed, drawButtons});
+      }
+
+    handleResetButtons = () => {
+      let drawMode = this.state.drawMode;
+      drawMode = -1;
+      let drawAllowed = this.state.drawAllowed;
+      drawAllowed = true;
+      const drawButtons = this.state.drawButtons.map(c=>{
+        c.status = false;
+        return c;
+      });
+      let algoSelected = this.state.algoSelected;
+      algoSelected = -1;
+      const algos = this.state.algos.map(c=>{
+        c.status =  false;
+        return c;
+      });
+      this.setState({drawMode, drawAllowed, drawButtons, algos, algoSelected});
+
+
+    }
+
+
     handleCellClick = (r, c) => {
 
         if(!this.state.drawAllowed) return;
@@ -96,8 +153,8 @@ class Grid extends Component {
             let targetLoc = prevState.targetLoc
             switch(this.state.drawMode){
                 case glob.wallButtonId:
-                    if(prevState.status[r][c] === glob.emptyId || prevState.status[r][c] === glob.wallId) 
-                        clone[r][c] = prevState.status[r][c] ^ 1; 
+                    if(prevState.status[r][c] === glob.emptyId || prevState.status[r][c] === glob.wallId)
+                        clone[r][c] = prevState.status[r][c] ^ 1;
                     break;
                 case glob.startButtonId:
                     if(clone[r][c] === glob.emptyId){
@@ -146,13 +203,22 @@ class Grid extends Component {
         this.setState({drawAllowed});
     }
 
+
     handleStep = (vis) => {
+        // console.log(vis)
+        const clone = JSON.parse(JSON.stringify(this.state.status));
+        clone[vis[0]][vis[1]] = glob.visId;
+
+        this.setState({status: clone})
+    }
+
+    clearLastAlgo = () => {
         // console.log(vis)
         const clone = JSON.parse(JSON.stringify(this.state.status));
         for(let i = 0; i < this.state.rows; i++){
             for(let j = 0; j < this.state.cols; j++){
-                if(vis[i][j] === 1 && clone[i][j] === glob.emptyId)
-                    clone[i][j] = glob.visId;
+                if(clone[i][j] === glob.visId)
+                    clone[i][j] = glob.emptyId;
             }
         }
         this.setState({status: clone})
@@ -166,12 +232,23 @@ class Grid extends Component {
                         el => <Button key={el.id} el={el} onSelectOption={ this.handleSelectDrawMode }/>
                     )}
                 </span>
+                <span>
+                    {this.state.algos.map(
+                        el => <Button key={el.id} el={el} onSelectOption={ this.handleSelectAlgo }/>
+                    )}
+                </span>
                 <Agent
-                    handlePhaseToggle={this.handlePhaseToggle}
-                    handleStep={this.handleStep}
-                    status={this.state.status}
                     beg={this.state.startLoc}
                     end={this.state.targetLoc}
+                    algoSelected={this.state.algoSelected}
+                    isAlgoRunning={this.state.isAlgoRunning}
+                    status={this.state.status}
+                    handlePhaseToggle={this.handlePhaseToggle}
+                    handleStep={this.handleStep}
+                    toggleIsAlgoRunning={this.toggleIsAlgoRunning}
+                    handleChecks={this.handleChecks}
+                    clearLastAlgo={this.clearLastAlgo}
+                    handleResetButtons={this.handleResetButtons}
                 />
                 {this.getBoard()}
             </React.Fragment>

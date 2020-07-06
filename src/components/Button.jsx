@@ -7,15 +7,22 @@ class Button extends Component {
     render() {
 
         let classes = "badge m-2 badge-";
-        classes += this.props.el.status == 0 ? "warning":"primary";
+        if(this.props.el.disable === true)
+        {
+          classes += "secondary";
+        }
+        else {
+
+          classes += this.props.el.status == 0 ? "dark":"primary";
+        }
 
         return (
           <React.Fragment>
-          <button 
-            className={classes} 
+          <button
+            className={classes}
             onClick={() => this.props.onSelectOption(this.props.el)}
-          > 
-              {this.props.el.label} 
+          >
+              {this.props.el.label}
           </button>
           </React.Fragment>
         );

@@ -49,9 +49,11 @@ class BFS {
         {
           this.f = 1
         }
-        this.que.push([[x+1, y], d+1])
-        this.orderVisted.push([x+1, y])
-        this.vis[x+1][y] = 1;
+        else{
+          this.que.push([[x+1, y], d+1])
+          this.orderVisted.push([x+1, y])
+          this.vis[x+1][y] = 1;
+        }
 
       }
       if(this.isValid(x-1, y) && this.vis[x-1][y] === 0 && this.status[x-1][y] !== glob.wallId){
@@ -59,27 +61,36 @@ class BFS {
         {
           this.f=1
         }
-        this.que.push([[x-1, y], d+1])
-        this.orderVisted.push([x-1, y])
-        this.vis[x-1][y] = 1;
+        else {
+          this.que.push([[x-1, y], d+1])
+          this.orderVisted.push([x-1, y])
+          this.vis[x-1][y] = 1;
+
+        }
       }
       if(this.isValid(x, y+1) && this.vis[x][y+1] === 0 && this.status[x][y+1] !== glob.wallId){
         if(x === this.end[0] && (y+1) === this.end[1])
         {
           this.f=1
         }
-        this.que.push([[x, y+1], d+1])
-        this.orderVisted.push([x, y+1])
-        this.vis[x][y+1] = 1;
+        else {
+
+          this.que.push([[x, y+1], d+1])
+          this.orderVisted.push([x, y+1])
+          this.vis[x][y+1] = 1;
+        }
       }
       if(this.isValid(x, y-1) && this.vis[x][y-1] === 0 && this.status[x][y-1] !== glob.wallId){
         if(x === this.end[0] && (y-1) === this.end[1])
         {
           this.f=1
         }
-        this.que.push([[x, y-1], d+1])
-        this.orderVisted.push([x, y-1])
-        this.vis[x][y-1] = 1;
+        else {
+          this.que.push([[x, y-1], d+1])
+          this.orderVisted.push([x, y-1])
+          this.vis[x][y-1] = 1;
+
+        }
       }
 
     }
