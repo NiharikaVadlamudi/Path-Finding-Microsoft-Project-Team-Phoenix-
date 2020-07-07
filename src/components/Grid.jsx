@@ -156,8 +156,8 @@ class Grid extends Component {
       }
 
     handleSelectAlgo = (element) => {
+      if(!this.state.drawAllowed) return;
         let algoSelected = this.state.algoSelected;
-
         const algos = this.state.algos.map(c=>{
           c.status = ((element !== undefined && c.id === element.id) ? algoSelected=c.id : false);
           return c;
