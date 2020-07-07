@@ -56,7 +56,7 @@ class Agent extends Component {
       else {
         var pauseResumeButton = JSON.parse(JSON.stringify(this.state.pauseResumeButton));
         pauseResumeButton.status = !pauseResumeButton.status;
-        pauseResumeButton.label = pauseResumeButton.status ? "PAUSE" : "RESUME" ;
+        pauseResumeButton.label = pauseResumeButton.status ? "RESUME" : "PAUSE" ;
         this.setState({pauseResumeButton});
       }
     }
@@ -114,7 +114,8 @@ class Agent extends Component {
                       this.props.resetAlgoButtons();
                       var algo = -1;
                       this.setState({startStopButton,algo});
-                      this.props.handlePhaseToggle(-1,true,false,-1,false);
+                      this.props.handlePhaseToggle(-1,true,-1,"stop",false);
+
                       this.togglePauseDisable();
                     }
 
