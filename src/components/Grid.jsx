@@ -172,6 +172,7 @@ class Grid extends Component {
           c.status = false;
           return c;
         });
+        this.resetAlgoButtons();
         this.setModes(-1,true,-1);
         this.setState({drawButtons});
       }

@@ -86,7 +86,7 @@ class Agent extends Component {
                 let algoItems = undefined
                 switch(this.state.algo)
                 {
-                  case glob.bfsButtonId: algoItems = new BFS(this.props); algoItems.orderVisted.shift(); break;
+                  case glob.bfsButtonId: algoItems = new BFS(this.props); algoItems.orderVisited.shift(); break;
                   default: break;
                 }
 
@@ -95,10 +95,10 @@ class Agent extends Component {
                 if(algoItems !== undefined && pause === false)
                 {
                   this.periodicStep = setInterval(() => {
-                    if(algoItems.orderVisted.length!==0  && pause === false)
+                    if(algoItems.orderVisited.length!==0  && pause === false)
                     {
                       pause = this.state.pauseResumeButton.status
-                      let cur = algoItems.orderVisted.shift();
+                      let cur = algoItems.orderVisited.shift();
                       this.props.handleStep(cur);
                     }
                     if(pause === true)
@@ -106,7 +106,7 @@ class Agent extends Component {
                       pause = this.state.pauseResumeButton.status;
 
                     }
-                    if(algoItems.orderVisted.length===0)
+                    if(algoItems.orderVisited.length===0)
                     {
                       var startStopButton = JSON.parse(JSON.stringify(this.state.startStopButton));
                       startStopButton.status = false

@@ -20,10 +20,10 @@ class BFS {
     }
     this.f = 0;
     this.que = [[this.beg, 0]]
-    this.orderVisted = [this.beg]
+    this.orderVisited = [this.beg]
     this.vis[this.beg[0]][this.beg[1]] = 1;
-    
-    // return this.f, this.vis, this.orderVisted;
+
+    // return this.f, this.vis, this.orderVisited;
     return this.execute();
   }
 
@@ -48,7 +48,7 @@ class BFS {
         }
         else{
           this.que.push([[x+1, y], d+1])
-          this.orderVisted.push([x+1, y])
+          this.orderVisited.push([x+1, y])
           this.vis[x+1][y] = 1;
         }
 
@@ -60,7 +60,7 @@ class BFS {
         }
         else {
           this.que.push([[x-1, y], d+1])
-          this.orderVisted.push([x-1, y])
+          this.orderVisited.push([x-1, y])
           this.vis[x-1][y] = 1;
 
         }
@@ -73,7 +73,7 @@ class BFS {
         else {
 
           this.que.push([[x, y+1], d+1])
-          this.orderVisted.push([x, y+1])
+          this.orderVisited.push([x, y+1])
           this.vis[x][y+1] = 1;
         }
       }
@@ -84,7 +84,7 @@ class BFS {
         }
         else {
           this.que.push([[x, y-1], d+1])
-          this.orderVisted.push([x, y-1])
+          this.orderVisited.push([x, y-1])
           this.vis[x][y-1] = 1;
 
         }
