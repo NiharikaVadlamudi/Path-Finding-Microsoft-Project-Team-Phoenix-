@@ -11,7 +11,8 @@ export default {
     visId: 4,
 
     bfsButtonId : 1,
-    aStarButtonId : 3,
+    aStarButtonId : 2,
+    djikstraButtonId : 3,
 
     searchPhaseId : 1,
     designPhaseId : -1,

@@ -13,7 +13,7 @@ class Button extends Component {
         }
         else {
 
-          classes += this.props.el.status == 0 ? "dark":"primary";
+          classes += this.props.el.status === false ? "dark":"primary";
         }
 
         return (

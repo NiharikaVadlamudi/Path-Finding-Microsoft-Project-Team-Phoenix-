@@ -5,9 +5,9 @@ import glob from '../components/global.jsx'
 class BFS {
 
   constructor(graph){
-    this.status = graph.status
-    this.beg = graph.beg
-    this.end = graph.end
+    this.status = graph.gridState.status
+    this.beg = graph.gridState.startLoc
+    this.end = graph.gridState.targetLoc
     this.rows = this.status.length
     this.cols = this.status[0].length
     this.vis = []
@@ -22,10 +22,7 @@ class BFS {
     this.que = [[this.beg, 0]]
     this.orderVisted = [this.beg]
     this.vis[this.beg[0]][this.beg[1]] = 1;
-    // this.prevd = -1
-    // console.log(this.end);
-    // this.execute();
-
+    
     // return this.f, this.vis, this.orderVisted;
     return this.execute();
   }

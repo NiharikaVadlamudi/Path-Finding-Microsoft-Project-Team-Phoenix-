@@ -14,12 +14,12 @@ class Agent extends Component {
     }
 
     handleStartStop = (button) => {
-        // do sanity checks
         var startStopButton = JSON.parse(JSON.stringify(this.state.startStopButton));
         if (startStopButton.status === false)
         {
+          console.log(this.props.gridState.algoSelected, "j");
           this.props.clearLastAlgo();
-          if(this.props.end === undefined || this.props.beg === undefined || this.props.algoSelected === -1)
+          if(this.props.gridState.targetLoc === undefined || this.props.gridState.startLoc === undefined || this.props.gridState.algoSelected === -1)
           {
             alert("Error")
             this.props.handleChecks();
@@ -27,26 +27,29 @@ class Agent extends Component {
           else {
             startStopButton.status = true;
             startStopButton.label = "STOP";
-            var algo = this.props.algoSelected;
+            var algo = this.state.algo;
+            algo = this.props.gridState.algoSelected;
             this.setState({startStopButton,algo})
-            this.props.handlePhaseToggle();
-            this.props.toggleIsAlgoRunning();
-            this.togglePause();
+            this.props.handlePhaseToggle(-1,false,this.props.gridState.algoSelected,"start");
+            this.togglePauseDisable();
           }
         }
         else {
-          startStopButton.status = false
+
+          startStopButton.status = false;
           startStopButton.label = "SEARCH";
-          this.props.handleResetButtons();
-          var algo = -1;
-          this.props.toggleIsAlgoRunning();
+          this.props.resetAlgoButtons();
+          var algo = this.state.algo;
+          algo = undefined;
           this.setState({startStopButton,algo});
-          this.props.handlePhaseToggle();
+          this.props.handlePhaseToggle(-1,true,-1,"stop");
+          this.togglePauseDisable();
+
         }
     }
 
     handlePauseResume = (button) => {
-      if(this.props.isAlgoRunning === false)
+      if(this.state.startStopButton.status === false)
       {
         alert("This button is disabled rn")
       }
@@ -58,19 +61,23 @@ class Agent extends Component {
       }
     }
 
-    togglePause = () => {
+    togglePauseDisable = () => {
       var pauseResumeButton = JSON.parse(JSON.stringify(this.state.pauseResumeButton));
       pauseResumeButton.disable = !pauseResumeButton.disable;
+      if(this.state.startStopButton.status)
+      {
+        // console.log(this.state.startStopButton.status)
+        pauseResumeButton.label = "PAUSE";
+        pauseResumeButton.status = false;
+
+      }
       this.setState({pauseResumeButton});
     }
-    pauseState = () => {
-      console.log("aaya")
-      return this.state.pauseResumeButton.status
-    }
+
 
     componentDidUpdate(prevProps, prevState) {
         // status changed from not searching to searching
-        // console.log(this.props.isAlgoRunning)
+
         if(prevState.startStopButton.status != this.state.startStopButton.status){
             const searching = this.state.startStopButton.status;
             var pause = this.state.pauseResumeButton.status;
@@ -102,13 +109,13 @@ class Agent extends Component {
                     if(algoItems.orderVisted.length===0)
                     {
                       var startStopButton = JSON.parse(JSON.stringify(this.state.startStopButton));
-                      startStopButton.status = false;
+                      startStopButton.status = false
                       startStopButton.label = "SEARCH";
-                      this.props.handleResetButtons();
+                      this.props.resetAlgoButtons();
                       var algo = -1;
                       this.setState({startStopButton,algo});
-                      this.props.toggleIsAlgoRunning();
-                      this.props.handlePhaseToggle();
+                      this.props.handlePhaseToggle(-1,true,false,-1);
+                      this.togglePauseDisable();
                     }
 
                   }, this.state.period);
