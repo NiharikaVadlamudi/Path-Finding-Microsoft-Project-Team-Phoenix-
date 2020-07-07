@@ -86,7 +86,8 @@ class Agent extends Component {
                 let algoItems = undefined
                 switch(this.state.algo)
                 {
-                  case glob.bfsButtonId: algoItems = new BFS(this.props); algoItems.orderVisited.shift(); break;
+                  case glob.bfsButtonId: algoItems = new BFS(this.props); algoItems.orderVisited = algoItems.orderVisited.reverse();
+                   algoItems.orderVisited.pop(); break;
                   default: break;
                 }
 
@@ -98,7 +99,7 @@ class Agent extends Component {
                     if(algoItems.orderVisited.length!==0  && pause === false)
                     {
                       pause = this.state.pauseResumeButton.status
-                      let cur = algoItems.orderVisited.shift();
+                      let cur = algoItems.orderVisited.pop();
                       this.props.handleStep(cur);
                     }
                     if(pause === true)
