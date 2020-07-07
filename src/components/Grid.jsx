@@ -83,7 +83,7 @@ class Grid extends Component {
     handleCellClick = (r, c) => {
 
       if(!this.state.drawAllowed) return;
-      if(!this.state.isEmptyVis)
+      if(!this.state.isEmptyVis && this.state.drawMode!=-1)
         this.clearLastAlgo();
       const updateStatus = (prevState) => {
         const clone = JSON.parse(JSON.stringify(prevState.status));
