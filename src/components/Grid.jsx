@@ -8,12 +8,12 @@ class Grid extends Component {
         rows: 25,
         cols: 40,
         status: [],
-        weight: [],
         startLoc: undefined,
         targetLoc: undefined,
         drawAllowed: true,
         drawMode: -1,
         algoSelected: -1,
+        isEmptyVis: true,
         drawButtons: [
             {id : glob.wallButtonId, label:"ADD WALL", status: false, disable: false},
             {id : glob.startButtonId, label:"ADD START", status:false, disable: false},
@@ -83,7 +83,8 @@ class Grid extends Component {
     handleCellClick = (r, c) => {
 
       if(!this.state.drawAllowed) return;
-
+      if(!this.state.isEmptyVis)
+        this.clearLastAlgo();
       const updateStatus = (prevState) => {
         const clone = JSON.parse(JSON.stringify(prevState.status));
         let startLoc = prevState.startLoc
@@ -183,9 +184,14 @@ class Grid extends Component {
       this.setState({algos});
     }
 
-    handlePhaseToggle = (drawModeVal, drawAllowedVal, algoSelectedVal, s) => {
+    handlePhaseToggle = (drawModeVal, drawAllowedVal, algoSelectedVal, s, isEmptyVisVal) => {
       this.setModes(drawModeVal, drawAllowedVal, algoSelectedVal);
       this.handleSelectDrawMode(undefined);
+      if (isEmptyVisVal!==undefined)
+      {
+        let isEmptyVis = isEmptyVisVal;
+        this.setState({isEmptyVis});
+      }
     }
 
 
@@ -204,7 +210,9 @@ class Grid extends Component {
                     clone[i][j] = glob.emptyId;
             }
         }
-        this.setState({status: clone})
+        let isEmptyVis = this.state.isEmptyVis;
+        isEmptyVis = true;
+        this.setState({status: clone, isEmptyVis});
     }
 
     render() {

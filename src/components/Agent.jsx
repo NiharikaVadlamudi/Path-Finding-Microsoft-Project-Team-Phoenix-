@@ -17,7 +17,7 @@ class Agent extends Component {
         var startStopButton = JSON.parse(JSON.stringify(this.state.startStopButton));
         if (startStopButton.status === false)
         {
-          console.log(this.props.gridState.algoSelected, "j");
+          // console.log(this.props.gridState.algoSelected, "j");
           this.props.clearLastAlgo();
           if(this.props.gridState.targetLoc === undefined || this.props.gridState.startLoc === undefined || this.props.gridState.algoSelected === -1)
           {
@@ -30,7 +30,7 @@ class Agent extends Component {
             var algo = this.state.algo;
             algo = this.props.gridState.algoSelected;
             this.setState({startStopButton,algo})
-            this.props.handlePhaseToggle(-1,false,this.props.gridState.algoSelected,"start");
+            this.props.handlePhaseToggle(-1,false,this.props.gridState.algoSelected,"start",undefined);
             this.togglePauseDisable();
           }
         }
@@ -42,7 +42,7 @@ class Agent extends Component {
           var algo = this.state.algo;
           algo = undefined;
           this.setState({startStopButton,algo});
-          this.props.handlePhaseToggle(-1,true,-1,"stop");
+          this.props.handlePhaseToggle(-1,true,-1,"stop",false);
           this.togglePauseDisable();
 
         }
@@ -56,7 +56,7 @@ class Agent extends Component {
       else {
         var pauseResumeButton = JSON.parse(JSON.stringify(this.state.pauseResumeButton));
         pauseResumeButton.status = !pauseResumeButton.status;
-        pauseResumeButton.label = pauseResumeButton.status ? "RESUME" : "PAUSE" ;
+        pauseResumeButton.label = pauseResumeButton.status ? "PAUSE" : "RESUME" ;
         this.setState({pauseResumeButton});
       }
     }
@@ -114,7 +114,7 @@ class Agent extends Component {
                       this.props.resetAlgoButtons();
                       var algo = -1;
                       this.setState({startStopButton,algo});
-                      this.props.handlePhaseToggle(-1,true,false,-1);
+                      this.props.handlePhaseToggle(-1,true,false,-1,false);
                       this.togglePauseDisable();
                     }
 
