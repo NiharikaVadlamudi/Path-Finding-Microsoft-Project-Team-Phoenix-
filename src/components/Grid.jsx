@@ -24,6 +24,7 @@ class Grid extends Component {
           {id : glob.bfsButtonId , label:"BFS" , status: false, disable: false},
           {id : glob.aStarButtonId , label:"A*" , status: false, disable: false},
           {id : glob.djikstraButtonId , label:"Djikstra" , status: false, disable: false},
+          {id: glob.bestfsButtonId, label: "BestFS", status: false, disable: false}
         ],
     }
 
@@ -197,6 +198,7 @@ class Grid extends Component {
 
 
     handleStep = (vis) => {
+      console.log("!")
         const clone = JSON.parse(JSON.stringify(this.state.status));
         clone[vis[0]][vis[1]] = glob.visId;
 

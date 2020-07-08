@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import glob from '../components/global.jsx'
+import glob from '../components/global.jsx';
+import TinyQueue from 'tinyqueue';
+import euclideanMetric from './metrics.js';
 
 // import Grid from '../components/Grid.jsx'
-class BFS {
+class BestFS {
 
   constructor(graph){
     this.status = graph.gridState.status
@@ -11,6 +13,7 @@ class BFS {
     this.rows = this.status.length
     this.cols = this.status[0].length
     this.vis = []
+    this.metric = euclideanMetric
 
     for(let i = 0; i < this.rows; i++){
       this.vis[i] = []
@@ -19,12 +22,24 @@ class BFS {
       }
     }
     this.f = 0;
-    this.que = [[this.beg, 0]]
+    this.que = new TinyQueue(
+        [[this.beg, 0]],
+        this.compare
+    )
     this.orderVisited = []
     this.vis[this.beg[0]][this.beg[1]] = 1;
 
-    // return this.f, this.vis, this.orderVisited;
     return this.execute();
+  }
+
+  getHeuristic = (a) => {
+      return this.metric(a[0], this.end);
+  }
+
+  compare = (a, b) => {
+    a = this.getHeuristic(a)
+    b = this.getHeuristic(b)
+    return a < b ? -1 : a > b ? 1 : 0;
   }
 
   isValid(x, y){
@@ -32,14 +47,14 @@ class BFS {
   }
 
   neighbours(x, y){
-    return [[x+1, y], [x-1, y], [x, y+1], [x, y-1]];
+      return [[x+1, y], [x-1, y], [x, y+1], [x, y-1]];
   }
 
   execute(){
 
     while(this.que.length!== 0 && this.f !== 1)
     {
-      let cur = this.que.shift()
+      let cur = this.que.pop()
       this.orderVisited.push(cur[0])
 
       let x = cur[0][0]
@@ -50,7 +65,7 @@ class BFS {
         let a = neigh[i][0]
         let b = neigh[i][1]
         if(this.isValid(a, b) && this.vis[a][b] === 0 && this.status[a][b] !== glob.wallId){
-            if(a === this.end[0] && b === this.end[1])
+            if((a) === this.end[0] && b === this.end[1])
             {
               this.f = 1
               break;
@@ -68,4 +83,4 @@ class BFS {
 
 }
 
-export default BFS;
+export default BestFS;

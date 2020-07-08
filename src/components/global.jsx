@@ -13,6 +13,7 @@ export default {
     bfsButtonId : 1,
     aStarButtonId : 2,
     djikstraButtonId : 3,
+    bestfsButtonId: 4,
 
     searchPhaseId : 1,
     designPhaseId : -1,

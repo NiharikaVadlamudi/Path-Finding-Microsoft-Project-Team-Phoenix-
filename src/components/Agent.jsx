@@ -2,7 +2,7 @@ import React, { Component, useEffect } from 'react';
 import Button from "./Button.jsx"
 import glob from "./global.jsx"
 import BFS from "../Algorithms/bfs.jsx"
-// import useInterval from 'react-useinterval';
+import BestFS from "../Algorithms/bestfs.jsx"
 
 
 class Agent extends Component {
@@ -86,10 +86,14 @@ class Agent extends Component {
                 let algoItems = undefined
                 switch(this.state.algo)
                 {
-                  case glob.bfsButtonId: algoItems = new BFS(this.props); algoItems.orderVisited = algoItems.orderVisited.reverse();
-                   algoItems.orderVisited.pop(); break;
+                  case glob.bfsButtonId: 
+                    algoItems = new BFS(this.props); break;
+                  case glob.bestfsButtonId:
+                    algoItems = new BestFS(this.props); break;
                   default: break;
                 }
+                algoItems.orderVisited = algoItems.orderVisited.reverse();
+                algoItems.orderVisited.pop();
 
                 pause = this.state.pauseResumeButton.status;
 

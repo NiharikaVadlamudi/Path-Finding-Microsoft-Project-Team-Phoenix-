@@ -13,9 +13,9 @@ import ReactDOM from 'react-dom'
 
 // Euclidean Distance 
 
-function euclideanMetric(x1,y1,x2,y2)
+function euclideanMetric(a, b)
 {
-    const dist = Math.pow((x1-x2),2) + Math.pow((y1-y2),2)
+    const dist = Math.pow((a[0]-b[0]),2) + Math.pow((a[1]-b[1]),2)
     return(dist)
 }
 
@@ -34,7 +34,7 @@ function chebychevMetric(x1,y1,x2,y2,D1=1,D2=1)
 {
     const dx=Math.abs(x1-x2)
     const dy=Math.abs(y1-y2)
-    return ( D1*(dx+dy) + (D2-2*D1)*(Math.min(dx,dy)) )        )
+    return ( D1*(dx+dy) + (D2-2*D1)*(Math.min(dx,dy)) )
 }
 
 
@@ -68,3 +68,4 @@ function vancouver(x1,y1,x2,y2)
 
 // EOD (More metrics will be added )
 
+export default euclideanMetric
