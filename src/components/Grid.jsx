@@ -12,7 +12,6 @@ class Grid extends Component {
         targetLoc: undefined,
         drawAllowed: true,
         drawMode: -1,
-        algoSelected: -1,
         isEmptyVis: true,
         drawButtons: [
             {id : glob.wallButtonId, label:"ADD WALL", status: false, disable: false},
@@ -20,12 +19,7 @@ class Grid extends Component {
             {id : glob.targetButtonId, label:"ADD TARGET", status: false, disable: false },
             {id : glob.weightButtonId, label:"ADD WEIGHT", status: false, disable: false},
         ],
-        algos : [
-          {id : glob.bfsButtonId , label:"BFS" , status: false, disable: false},
-          {id : glob.aStarButtonId , label:"A*" , status: false, disable: false},
-          {id : glob.djikstraButtonId , label:"Djikstra" , status: false, disable: false},
-          {id: glob.bestfsButtonId, label: "BestFS", status: false, disable: false}
-        ],
+
     }
 
     constructor() {
@@ -69,15 +63,17 @@ class Grid extends Component {
             tr.push(<tr key={r}>{td}</tr>);
         }
         return (
-            <div className="container shadow-lg p-3 mb-5 rounded">
-                <div className="row justify-content-md-cente">
+
+            // <div className="container shadow-lg p-3 mb-5 rounded">
+                <div className="row justify-content-md-center">
                     <div className="col-sm-12">
                         <table className="table table-bordered table-dark" width="100%">
                             <tbody>{tr}</tbody>
                         </table>
                     </div>
                 </div>
-            </div>
+            // </div>
+
         );
     }
 
@@ -136,14 +132,12 @@ class Grid extends Component {
       });
     }
 
-    setModes = (drawModeVal, drawAllowedVal, algoSelectedVal) => {
+    setModes = (drawModeVal, drawAllowedVal) => {
       let drawMode = this.state.drawMode;
       let drawAllowed = this.state.drawAllowed;
-      let algoSelected = this.state.algoSelected;
       drawMode = drawModeVal;
       drawAllowed = drawAllowedVal;
-      algoSelected = algoSelectedVal;
-      this.setState({drawMode,drawAllowed,algoSelected});
+      this.setState({drawMode,drawAllowed});
     }
 
     handleSelectDrawMode = (element) => {
@@ -156,38 +150,20 @@ class Grid extends Component {
         this.setState({drawButtons, drawMode});
       }
 
-    handleSelectAlgo = (element) => {
-      if(!this.state.drawAllowed) return;
-        let algoSelected = this.state.algoSelected;
-        const algos = this.state.algos.map(c=>{
-          c.status = ((element !== undefined && c.id === element.id) ? algoSelected=c.id : false);
-          return c;
-        });
-        this.setState({algos,algoSelected});
-
-      }
-
 
     handleChecks = () => {
       const drawButtons = this.state.drawButtons.map(c=>{
           c.status = false;
           return c;
         });
-        this.resetAlgoButtons();
-        this.setModes(-1,true,-1);
+
+        this.setModes(-1,true);
         this.setState({drawButtons});
       }
 
-    resetAlgoButtons = () => {
-      const algos = this.state.algos.map(c=>{
-        c.status =  false;
-        return c;
-      });
-      this.setState({algos});
-    }
 
-    handlePhaseToggle = (drawModeVal, drawAllowedVal, algoSelectedVal, s, isEmptyVisVal) => {
-      this.setModes(drawModeVal, drawAllowedVal, algoSelectedVal);
+    handlePhaseToggle = (drawModeVal, drawAllowedVal, s, isEmptyVisVal) => {
+      this.setModes(drawModeVal, drawAllowedVal);
       this.handleSelectDrawMode(undefined);
       if (isEmptyVisVal!==undefined)
       {
@@ -198,10 +174,8 @@ class Grid extends Component {
 
 
     handleStep = (vis) => {
-      console.log("!")
         const clone = JSON.parse(JSON.stringify(this.state.status));
         clone[vis[0]][vis[1]] = glob.visId;
-
         this.setState({status: clone})
     }
 
@@ -226,20 +200,15 @@ class Grid extends Component {
                         el => <Button key={el.id} el={el} onSelectOption={ this.handleSelectDrawMode }/>
                     )}
                 </span>
-                <span>
-                    {this.state.algos.map(
-                        el => <Button key={el.id} el={el} onSelectOption={ this.handleSelectAlgo }/>
-                    )}
-                </span>
                 <Agent
                     gridState={this.state}
                     handlePhaseToggle={this.handlePhaseToggle}
                     handleStep={this.handleStep}
                     handleChecks={this.handleChecks}
                     clearLastAlgo={this.clearLastAlgo}
-                    resetAlgoButtons={this.resetAlgoButtons}
+                    getBoard = {this.getBoard}
                 />
-                {this.getBoard()}
+
             </React.Fragment>
         );
     }
