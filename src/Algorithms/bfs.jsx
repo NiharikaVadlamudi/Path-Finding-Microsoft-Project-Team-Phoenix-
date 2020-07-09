@@ -4,7 +4,7 @@ import glob from '../components/global.jsx'
 // import Grid from '../components/Grid.jsx'
 class BFS {
 
-  constructor(graph){
+  constructor(graph, neigh, heur){
     this.status = graph.gridState.status
     this.beg = graph.gridState.startLoc
     this.end = graph.gridState.targetLoc
@@ -18,6 +18,7 @@ class BFS {
         this.vis[i][j] = 0;
       }
     }
+    this.neigh = neigh
     this.f = 0;
     this.que = [[this.beg, 0]]
     this.orderVisited = []
@@ -32,7 +33,10 @@ class BFS {
   }
 
   neighbours(x, y){
-    return [[x+1, y], [x-1, y], [x, y+1], [x, y-1]];
+    if(this.neigh === 4)
+      return [[x+1, y], [x-1, y], [x, y+1], [x, y-1]];
+    else
+      return [[x+1, y], [x-1, y], [x, y+1], [x, y-1], [x+1, y+1], [x+1, y-1], [x-1, y+1], [x-1, y-1]];
   }
 
   execute(){

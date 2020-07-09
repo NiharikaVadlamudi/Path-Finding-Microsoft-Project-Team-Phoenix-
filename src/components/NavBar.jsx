@@ -4,6 +4,10 @@ class NavBar extends Component {
 
     //stateless functional component
 
+    shouldComponentUpdate(){
+        return false;
+    }
+
     render() {
         return (
             <nav className="navbar navbar-expand-sm bg-dark navbar-dark">

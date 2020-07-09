@@ -21,6 +21,7 @@ Followed: `https://blog.miguelgrinberg.com/post/how-to-create-a-react--flask-pro
   - yarn
   - yarn add node-sass 
   - yarn add bootstrap
+  - yarn add react-select
   <!-- - yarn start-back  -->
   <!-- - Open another terminal in the main folder and run the following in the new terminal: -->
   - yarn add tinyqueue

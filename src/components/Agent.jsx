@@ -1,9 +1,6 @@
 import React, { Component, useEffect } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
-import Row from 'react-bootstrap/Row'
-import Container from 'react-bootstrap/Container'
-import Col from 'react-bootstrap/Col'
 import Button from "./Button.jsx"
 import AccordionElement from "./Accordion.jsx"
 import glob from "./global.jsx"
@@ -17,11 +14,13 @@ class Agent extends Component {
         startStopButton: {id : glob.startSearchButtonId, label:"SEARCH", status: false},
         pauseResumeButton: {id : glob.pauseResumeButtonId, label:"PAUSE", status: false, disable: true},
         period: 1,
+        neigh: undefined,
+        heur: undefined,
         algos : [
-          {id : glob.bfsButtonId , label:"BFS" , status: false, disable: false},
-          {id : glob.aStarButtonId , label:"A*" , status: false, disable: false},
-          {id : glob.djikstraButtonId , label:"Djikstra" , status: false, disable: false},
-          {id: glob.bestfsButtonId, label: "BestFS", status: false, disable: false}
+          {id : glob.bfsButtonId , label:"BFS" , options: [false, true]},
+          {id : glob.aStarButtonId , label:"A*" , options: [true, true]},
+          {id : glob.djikstraButtonId , label:"Djikstra" , options: [false, true]},
+          {id: glob.bestfsButtonId, label: "BestFS", options: [true, true]}
         ],
 
     }
@@ -82,29 +81,16 @@ class Agent extends Component {
       this.setState({pauseResumeButton});
     }
 
-    handleSelectAlgo = (element) => {
+    handleSelectAlgo = (key, heur, neigh) =>  (event, isExpanded) => {
       if(!this.props.gridState.drawAllowed) return;
-      let algo = this.state.algo;
-      if(element.status === false)
-      {
-        const algos = this.state.algos.map(c=>{
-          c.status = ((element !== undefined && c.id === element.id) ? algo=c.id : false);
-          return c;
-        });
-        this.setState({algos,algo});
+      if(isExpanded === undefined || isExpanded === true){
+        this.setState({
+          algo: key,
+          heur: (heur ? heur.value : this.state.heur),
+          neigh: (neigh ? neigh.value : this.state.neigh)
+        })
       }
-      else {
-        const algos = this.state.algos.map(c=>{
-          c.status = false;
-          return c;
-        });
-        algo = undefined;
-        this.setState({algos,algo});
-
-      }
-
-
-      }
+    }
 
     resetAlgos = () => {
         let algo = this.state.algo;
@@ -129,9 +115,9 @@ class Agent extends Component {
                 switch(this.state.algo)
                 {
                   case glob.bfsButtonId:
-                    algoItems = new BFS(this.props); break;
+                    algoItems = new BFS(this.props, this.state.neigh, this.state.heur); break;
                   case glob.bestfsButtonId:
-                    algoItems = new BestFS(this.props); break;
+                    algoItems = new BestFS(this.props, this.state.neigh, this.state.heur); break;
                   default: break;
                 }
                 algoItems.orderVisited = algoItems.orderVisited.reverse();
@@ -181,25 +167,22 @@ class Agent extends Component {
     }
 
     render() {
+      // console.log("agent rerender", this.algo, this.heur, this.neigh)
         return (
             <span>
                 <Button el={this.state.startStopButton} onSelectOption={ this.handleStartStop }/>
                 <Button el={this.state.pauseResumeButton} onSelectOption={ this.handlePauseResume }/>
-                <div>
-
-                <Container>
-                <Row>
-                <Col  md={{ span: 4 }}>{this.props.getBoard()}</Col>
-                <Col  md={{  offset: 7 }}>
-                <Accordion >
-                    {this.state.algos.map(
-                        el => <AccordionElement key={el.id} el={el} onSelectOption={ this.handleSelectAlgo } />
-                    )}
-                </Accordion>
-                </Col>
-                </Row>
-                </Container>
-                </div>
+                
+                {this.state.algos.map(el => 
+                  <AccordionElement 
+                    curAlgo={this.state.algo}
+                    id={el.id}
+                    label={el.label}
+                    options={el.options}
+                    onSelectOption={this.handleSelectAlgo}
+                  />
+                )}
+                
             </span>
          );
     }
