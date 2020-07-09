@@ -21,7 +21,6 @@ class AccordionElement extends Component {
         classes += this.props.el.status === false ? "dark":"primary";
       }
 
-
         return (
           <React.Fragment>
             <Card style={{ width: '12rem' }}>
