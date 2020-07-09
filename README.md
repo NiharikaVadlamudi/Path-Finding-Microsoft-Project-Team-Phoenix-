@@ -11,14 +11,15 @@ Followed: `https://blog.miguelgrinberg.com/post/how-to-create-a-react--flask-pro
 <!-- - Delete the venv folder in backend -->
 - Run the following commands in the terminal:
   - git clone https://github.com/NiharikaVadlamudi/Path-Finding-Microsoft-Project-Team-Phoenix-.git
-  <!-- - cd backend -->
-  <!-- - python3 -m venv venv -->
-  <!-- - source venv/bin/activate -->
-  <!-- - pip install flask python-dotenv -->
-  <!-- - flask run    { To check if flask is installled correctly & working . Proceed with  Ctrl+c to stop }  -->
-  <!-- - cd .. {Back to the main folder }  -->
+  - npm install react-bootstrap bootstrap
+  - cd backend
+  - python3 -m venv venv
+  - source venv/bin/activate 
+  - pip install flask python-dotenv 
+  - flask run    { To check if flask is installled correctly & working . Proceed with  Ctrl+c to stop }  
+  - cd .. {Back to the main folder } 
   - yarn
-  <!-- - yarn add node-sass -->
+  - yarn add node-sass 
   - yarn add bootstrap
   <!-- - yarn start-back  -->
   <!-- - Open another terminal in the main folder and run the following in the new terminal: -->
