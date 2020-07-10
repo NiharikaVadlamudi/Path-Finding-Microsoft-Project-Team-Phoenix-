@@ -6,19 +6,13 @@
 import React, { Component } from 'react';
 import glob from '../components/global.jsx';
 import TinyQueue from 'tinyqueue';
-import euclideanMetric from './metrics.js';
+import * from './metrics.js'
 
-//Priority Queue
-const TinyQueue=require('tinyqueue')
 // Global Declarations
 const inf=Infinity
-
 class Astar{
-
-
-    // Basic Constructor (Properties from graph class)
-
-    constructor(graph)
+    // Basic Constructor (Properties from graph class
+    constructor(graph, neigh, heur)
     {
         this.status=graph.gridState.status
         this.beg=grid.gridState.startLoc
@@ -26,7 +20,9 @@ class Astar{
         this.rows = this.status.length
         this.cols = this.status[0].length
         this.vis = []
-        this.metric = euclideanMetric
+        this.metric = this.chooseHeuristic(heur)
+        console.log(heur, this.metric)
+        
 
         // Additional Params.
         this.score=[]
@@ -71,6 +67,15 @@ class Astar{
     }
     
     // All helper functions .
+    chooseHeuristic(heur){
+    switch(heur){
+      case glob.ManhattanId: return manhattanMetric;
+      case glob.EuclideanId: return euclideanMetric;
+      case glob.VancouverId: return vancouverMetric;
+      default: break;
+    }
+  }
+
 
     compare(a,b)
     {
