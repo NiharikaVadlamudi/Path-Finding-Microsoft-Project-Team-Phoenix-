@@ -94,9 +94,9 @@ class Astar{
         return x < this.rows && x >= 0 && y < this.cols && y >= 0 ;
     }
 
-    myNeighbours(x,y,type='four')
+    myNeighbours(x,y)
     {
-        if(type=='four')
+        if(this.neigh==4)
             return([ [x+1,y],[x-1,y],[x,y-1],[x,y+1] ])
         else
             return([ [x-1,y-1],[x,y-1],[x+1,y-1],[x-1,y],[x+1,y],[x-1,y+1],[x+1,y+1]])
