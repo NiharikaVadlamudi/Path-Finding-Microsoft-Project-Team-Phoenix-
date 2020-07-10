@@ -119,15 +119,15 @@ class Astar{
             let fcur=gcur+hcur
 
             //Neighbours
-            let neigh=this.myNeighbours(x,y)
+            let ngh=this.myNeighbours(x,y)
 
             // Iterating through the nghs
 
-            for(let i=0;i<neigh.length;i++)
+            for(let i=0;i<ngh.length;i++)
             {   
                 //Parameters of neighbours
-                let a =neigh[i][0][0]
-                let b =neigh[i][0][1]
+                let a =ngh[i][0][0]
+                let b =ngh[i][0][1]
                 let gScore=this.score[a][b][0]
                 let hScore=this.score[a][b][1]
 
