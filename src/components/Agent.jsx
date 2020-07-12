@@ -6,8 +6,8 @@ import AccordionElement from "./Accordion.jsx"
 import glob from "./global.jsx"
 import BFS from "../Algorithms/bfs.jsx"
 import BestFS from "../Algorithms/bestfs.jsx"
-import Astar from "../Algorithms/astar"
-import DFS from '../Algorithms/dfs'
+import Astar from "../Algorithms/astar.jsx"
+import Dijkstra from "../Algorithms/dijkstras.jsx"
 
 
 
@@ -25,7 +25,7 @@ class Agent extends Component {
           {id : glob.aStarButtonId , label:"A*" , options: [true, true]},
           {id : glob.djikstraButtonId , label:"Djikstra" , options: [false, true]},
           {id: glob.bestfsButtonId, label: "BestFS", options: [true, true]},
-          {id : glob.dfsButtonId,label:"DFS",options:[true,true]}
+          // {id : glob.dfsButtonId,label:"DFS",options:[true,true]}
             
         ],
 
@@ -127,8 +127,8 @@ class Agent extends Component {
                       break;
                   case glob.aStarButtonId:
                     algoItems= new Astar(this.props,this.state.neigh,this.state.heur); break;
-                  case glob.dfsButtonId:
-                    algoItems= new DFS(this.props,this.state.neigh,this.state.heur); break;
+                  case glob.djikstraButtonId:
+                    algoItems= new Dijkstra(this.props,this.state.neigh,this.state.heur); break;
                   default: break;
                 }
                 algoItems.orderVisited = algoItems.orderVisited.reverse();

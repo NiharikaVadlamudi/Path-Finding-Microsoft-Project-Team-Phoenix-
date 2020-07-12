@@ -11,11 +11,14 @@ class BFS {
     this.rows = this.status.length
     this.cols = this.status[0].length
     this.vis = []
+    this.par = []
 
     for(let i = 0; i < this.rows; i++){
+      this.par[i] = []
       this.vis[i] = []
       for(let j = 0; j < this.cols; j++){
         this.vis[i][j] = 0;
+        this.par[i][j] = [i, j]
       }
     }
     this.neigh = neigh
@@ -32,11 +35,11 @@ class BFS {
     return x < this.rows && x >= 0 && y < this.cols && y >= 0;
   }
 
-  neighbours(x, y){
-    if(this.neigh === 4)
-      return [[x+1, y], [x-1, y], [x, y+1], [x, y-1]];
+  neighbours(x, y) {
+    if (this.neigh == 4)
+      return [[x - 1, y], [x, y - 1], [x, y + 1], [x + 1, y]];
     else
-      return [[x+1, y], [x-1, y], [x, y+1], [x, y-1], [x+1, y+1], [x+1, y-1], [x-1, y+1], [x-1, y-1]];
+      return [[x - 1, y - 1], [x - 1, y], [x, y - 1], [x - 1, y + 1], [x + 1, y - 1], [x, y + 1], [x + 1, y], [x + 1, y + 1]];
   }
 
   execute(){
@@ -54,6 +57,7 @@ class BFS {
         let a = neigh[i][0]
         let b = neigh[i][1]
         if(this.isValid(a, b) && this.vis[a][b] === 0 && this.status[a][b] !== glob.wallId){
+            this.par[a][b] = [x, y]
             if(a === this.end[0] && b === this.end[1])
             {
               this.f = 1
