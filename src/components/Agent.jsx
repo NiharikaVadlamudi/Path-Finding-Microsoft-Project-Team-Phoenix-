@@ -127,6 +127,8 @@ class Agent extends Component {
                       break;
                   case glob.aStarButtonId:
                     algoItems= new Astar(this.props,this.state.neigh,this.state.heur); break;
+                  case glob.dfsButtonId:
+                    algoItems= new DFS(this.props,this.state.neigh,this.state.heur); break;
                   default: break;
                 }
                 algoItems.orderVisited = algoItems.orderVisited.reverse();
