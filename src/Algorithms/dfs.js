@@ -97,14 +97,16 @@ class DFS{
         while(this.stack.length!==0 && this.flag==false)
         {
             let cur=this.stack.pop()
-            console.log('CURR->',cur)
+            //console.log('CURR->',cur)
+            
             let x=cur[0][0]
             let y=cur[0][1]
             let d=cur[1]
 
             this.orderVisited.push(cur[0])
-
+            
             let ngh=this.myNeighbours(x,y)
+
             for(var i=0;i<ngh.length;i++)
             {
                 let xc=ngh[i][0]
