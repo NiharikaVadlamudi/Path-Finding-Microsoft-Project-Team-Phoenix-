@@ -24,7 +24,9 @@ class Agent extends Component {
           {id : glob.bfsButtonId , label:"BFS" , options: [false, true]},
           {id : glob.aStarButtonId , label:"A*" , options: [true, true]},
           {id : glob.djikstraButtonId , label:"Djikstra" , options: [false, true]},
-          {id: glob.bestfsButtonId, label: "BestFS", options: [true, true]}
+          {id: glob.bestfsButtonId, label: "BestFS", options: [true, true]},
+          {id : glob.dfsButtonId,label:"DFS",options:[true,true]}
+            
         ],
 
     }
