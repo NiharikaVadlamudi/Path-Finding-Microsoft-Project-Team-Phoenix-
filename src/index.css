@@ -28,6 +28,10 @@ td.target{
   background-color: green;
 }
 
+td.weight{
+  background-color: blueviolet;
+}
+
 td.vis{
   background-color: grey;
 }
