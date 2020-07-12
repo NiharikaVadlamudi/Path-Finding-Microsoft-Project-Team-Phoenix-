@@ -118,6 +118,12 @@ class Agent extends Component {
                     algoItems = new BFS(this.props, this.state.neigh, this.state.heur); break;
                   case glob.bestfsButtonId:
                     algoItems = new BestFS(this.props, this.state.neigh, this.state.heur); break;
+                  case glob.weightButtonId:
+                      if (prevState.status[r][c] === glob.emptyId || prevState.status[r][c] === glob.weightId)
+                        clone[r][c] = prevState.status[r][c] ^ 1;
+                        let k = prevState.status[r][c];
+                        const k = 2;
+                      break;
                   default: break;
                 }
                 algoItems.orderVisited = algoItems.orderVisited.reverse();
