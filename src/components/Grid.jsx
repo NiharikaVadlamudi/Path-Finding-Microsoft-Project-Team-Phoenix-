@@ -44,6 +44,7 @@ class Grid extends Component {
       case glob.startId: return "start";
       case glob.targetId: return "target";
       case glob.visId: return "vis";
+      case glob.weightId: return "weight";
       default: break;
     }
   }
@@ -119,6 +120,11 @@ class Grid extends Component {
           }
           break;
         case glob.weightButtonId:
+          case glob.weightButtonId:
+          if (prevState.status[r][c] === glob.emptyId || prevState.status[r][c] === glob.weightId)
+            clone[r][c] = prevState.status[r][c] ^ 1;
+            let k = prevState.status[r][c];
+                k = 2;
           break; //change later
         default: break;
       }
