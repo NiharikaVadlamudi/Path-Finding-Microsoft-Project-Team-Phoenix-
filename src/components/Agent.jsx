@@ -6,6 +6,9 @@ import AccordionElement from "./Accordion.jsx"
 import glob from "./global.jsx"
 import BFS from "../Algorithms/bfs.jsx"
 import BestFS from "../Algorithms/bestfs.jsx"
+import Astar from "../Algorithms/astar"
+
+
 
 
 class Agent extends Component {
