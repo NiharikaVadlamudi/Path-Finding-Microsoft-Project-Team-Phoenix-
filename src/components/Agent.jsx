@@ -7,7 +7,7 @@ import glob from "./global.jsx"
 import BFS from "../Algorithms/bfs.jsx"
 import BestFS from "../Algorithms/bestfs.jsx"
 import Astar from "../Algorithms/astar"
-
+import DFS from '../Algorithms/dfs'
 
 
 
