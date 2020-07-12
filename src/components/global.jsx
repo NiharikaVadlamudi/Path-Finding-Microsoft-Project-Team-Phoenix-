@@ -21,7 +21,7 @@ export default {
 
     startStopButtonId:1,
     pauseResumeButtonId:2,
-    clearBoardButtonId:3,
+    clearWallsButtonId:3,
 
     ManhattanId: 1,
     EuclideanId: 2,

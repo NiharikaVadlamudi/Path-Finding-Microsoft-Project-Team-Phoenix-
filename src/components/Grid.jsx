@@ -119,13 +119,7 @@ class Grid extends Component {
             targetLoc = undefined;
           }
           break;
-        case glob.weightButtonId:
-          case glob.weightButtonId:
-          if (prevState.status[r][c] === glob.emptyId || prevState.status[r][c] === glob.weightId)
-            clone[r][c] = prevState.status[r][c] ^ 1;
-            let k = prevState.status[r][c];
-                k = 2;
-          break; //change later
+
         default: break;
       }
       return [clone, startLoc, targetLoc];
@@ -200,6 +194,27 @@ class Grid extends Component {
     this.setState({ status: clone, isEmptyVis });
   }
 
+
+  handleClearWalls = () => {
+    if(this.state.drawAllowed === true)
+    {
+      const clone = JSON.parse(JSON.stringify(this.state.status));
+      for (let i = 0; i < this.state.rows; i++) {
+        for (let j = 0; j < this.state.cols; j++) {
+          if (clone[i][j] === glob.visId || clone[i][j] === glob.wallId)
+          clone[i][j] = glob.emptyId;
+        }
+      }
+      let isEmptyVis = this.state.isEmptyVis;
+      isEmptyVis = true;
+      this.setState({ status: clone, isEmptyVis });
+
+    }
+    else {
+      alert("Stop algo before clearing walls")
+    }
+  }
+
   render() {
     // console.log("grid rerender")
     return (
@@ -219,6 +234,7 @@ class Grid extends Component {
                 handleStep={this.handleStep}
                 handleChecks={this.handleChecks}
                 clearLastAlgo={this.clearLastAlgo}
+                handleclearWalls={this.handleClearWalls}
               />
             </Col>
           </Row>

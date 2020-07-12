@@ -13,6 +13,7 @@ class Agent extends Component {
         algo: undefined,
         startStopButton: {id : glob.startSearchButtonId, label:"SEARCH", status: false},
         pauseResumeButton: {id : glob.pauseResumeButtonId, label:"PAUSE", status: false, disable: true},
+        clearWallsButton: {id : glob.clearWallsButtonId, label:"CLEAR WALLS", status: false},
         period: 1,
         neigh: undefined,
         heur: undefined,
@@ -118,11 +119,6 @@ class Agent extends Component {
                     algoItems = new BFS(this.props, this.state.neigh, this.state.heur); break;
                   case glob.bestfsButtonId:
                     algoItems = new BestFS(this.props, this.state.neigh, this.state.heur); break;
-                  case glob.weightButtonId:
-                      if (prevState.status[r][c] === glob.emptyId || prevState.status[r][c] === glob.weightId)
-                        clone[r][c] = prevState.status[r][c] ^ 1;
-                        let k = prevState.status[r][c];
-                        const k = 2;
                       break;
                   default: break;
                 }
@@ -178,9 +174,10 @@ class Agent extends Component {
             <span>
                 <Button el={this.state.startStopButton} onSelectOption={ this.handleStartStop }/>
                 <Button el={this.state.pauseResumeButton} onSelectOption={ this.handlePauseResume }/>
-                
-                {this.state.algos.map(el => 
-                  <AccordionElement 
+                <Button el={this.state.clearWallsButton} onSelectOption={ this.props.handleclearWalls }/>
+
+                {this.state.algos.map(el =>
+                  <AccordionElement
                     curAlgo={this.state.algo}
                     id={el.id}
                     label={el.label}
@@ -188,7 +185,7 @@ class Agent extends Component {
                     onSelectOption={this.handleSelectAlgo}
                   />
                 )}
-                
+
             </span>
          );
     }
