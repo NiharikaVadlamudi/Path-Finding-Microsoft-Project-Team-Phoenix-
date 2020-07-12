@@ -21,6 +21,7 @@ class Grid extends Component {
       { id: glob.startButtonId, label: "ADD START", status: false, disable: false },
       { id: glob.targetButtonId, label: "ADD TARGET", status: false, disable: false },
       { id: glob.weightButtonId, label: "ADD WEIGHT", status: false, disable: false },
+      {id : glob.dfsButtonId,label:"DFS",options:[true,true]}
     ],
 
   }
