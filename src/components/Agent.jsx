@@ -30,8 +30,9 @@ class Agent extends Component {
           {id: glob.bestfsButtonId, label: "BestFS", options: [true, true]},
           {id: glob.bidirectionalBFSButtonId, label: "Bidirecitonal BFS", options: [false, true]},
           {id: glob.bidirectionalDijkstraButtonId, label: "Bidirecitonal Dijkstra", options: [false, true]},
-          // {id : glob.dfsButtonId,label:"DFS",options:[true,true]}
-            
+          {id : glob.dfsButtonId,label:"DFS",options:[false,true]},
+          {id: glob.biDFSButtonId, label: "Bidirecitonal DFS", options: [false,true]},
+          
         ],
 
     }
