@@ -9,6 +9,8 @@ export default {
     startId: 2,
     targetId: 3,
     visId: 4,
+    weightId: 5,
+    visAndWeightId: 6,
 
     bfsButtonId : 1,
     aStarButtonId : 2,
@@ -30,4 +32,5 @@ export default {
     EuclideanId: 2,
     VancouverId: 3,
 
+    weightVal: 5,
 }

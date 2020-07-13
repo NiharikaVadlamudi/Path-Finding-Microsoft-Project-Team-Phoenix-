@@ -55,14 +55,15 @@ class Dijkstra {
   }
 
   getActualDist(par, cur){
-    return 1;
+    // console.log("gbdv", this.status[cur[0]][cur[1]] === glob.weightId ? glob.weightVal : 1)
+    return this.status[cur[0]][cur[1]] === glob.weightId ? glob.weightVal : 1;
   }
 
   step(){
     if(this.que.length === 0 || this.f === 1)
       return false;
     let cur = this.que.pop();
-    console.log(cur)
+    // console.log("bv", cur)
     let x = cur[0][0];
     let y = cur[0][1];
     let d = cur[1];
@@ -71,7 +72,7 @@ class Dijkstra {
     if(this.vis[x][y] === 1)
       return true;
     this.dist[x][y] = d;
-    this.vis[x][y] = 1;
+    this.vis[x][y] = 2;
     this.orderVisited.push([x, y]);
     if(x === this.end[0] && y === this.end[1]){
       this.f = 1;

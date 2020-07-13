@@ -35,3 +35,7 @@ td.weight{
 td.vis{
   background-color: grey;
 }
+
+td.visWeight{
+  background-color: darkorchid;
+}

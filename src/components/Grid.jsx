@@ -45,6 +45,7 @@ class Grid extends Component {
       case glob.targetId: return "target";
       case glob.visId: return "vis";
       case glob.weightId: return "weight";
+      case glob.visAndWeightId: return "visWeight";
       default: break;
     }
   }
@@ -120,9 +121,12 @@ class Grid extends Component {
           }
           break;
           case glob.weightButtonId:
-          if(prevState.status[r][c] === glob.weightId || prevState.status[r][c] === glob.emptyId){
+          if(prevState.status[r][c] === glob.emptyId){
             clone[r][c] = glob.weightId;      
-            }
+          }
+          else if(prevState.status[r][c] === glob.weightId){
+            clone[r][c] = glob.emptyId;
+          }
           break;
 
         default: break;
@@ -182,7 +186,7 @@ class Grid extends Component {
 
   handleStep = (vis) => {
     const clone = JSON.parse(JSON.stringify(this.state.status));
-    clone[vis[0]][vis[1]] = glob.visId;
+    clone[vis[0]][vis[1]] = clone[vis[0]][vis[1]] === glob.weightId ? glob.visAndWeightId : glob.visId;
     this.setState({ status: clone })
   }
 
@@ -192,6 +196,8 @@ class Grid extends Component {
       for (let j = 0; j < this.state.cols; j++) {
         if (clone[i][j] === glob.visId)
           clone[i][j] = glob.emptyId;
+        else if(clone[i][j] === glob.visAndWeightId)
+          clone[i][j] = glob.weightId;
       }
     }
     let isEmptyVis = this.state.isEmptyVis;
@@ -206,8 +212,8 @@ class Grid extends Component {
       const clone = JSON.parse(JSON.stringify(this.state.status));
       for (let i = 0; i < this.state.rows; i++) {
         for (let j = 0; j < this.state.cols; j++) {
-          if (clone[i][j] === glob.visId || clone[i][j] === glob.wallId)
-          clone[i][j] = glob.emptyId;
+          if (clone[i][j] !== glob.startId && clone[i][j] !== glob.targetId && clone[i][j] !== glob.emptyId)
+            clone[i][j] = glob.emptyId;
         }
       }
       let isEmptyVis = this.state.isEmptyVis;
@@ -221,7 +227,6 @@ class Grid extends Component {
   }
 
   render() {
-    // console.log("grid rerender")
     return (
       <React.Fragment>
         <span>

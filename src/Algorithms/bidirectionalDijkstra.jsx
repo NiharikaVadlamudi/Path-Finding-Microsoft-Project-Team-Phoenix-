@@ -1,4 +1,4 @@
-import Dijkstra from "./bfs.jsx"
+import Dijkstra from "./dijkstra.jsx"
 
 class BidirectionalDijkstra {
 
@@ -22,6 +22,8 @@ class BidirectionalDijkstra {
                 this.par[i][j] = [i, j]
             }
         }
+        this.f = 0;
+
         if (exec)
             return this.execute();
     }
@@ -32,8 +34,10 @@ class BidirectionalDijkstra {
         if (this.s2g.step()) {
             x = this.s2g.orderVisited[this.s2g.orderVisited.length - 1][0]
             y = this.s2g.orderVisited[this.s2g.orderVisited.length - 1][1]
-            if (this.g2s.vis[x][y] === 2)
+            if (this.g2s.vis[x][y] === 2){
+                this.f = 1;
                 return false;
+            }
             this.orderVisited.push([x, y])
             this.par[x][y] = this.s2g.par[x][y]
             goNext = true;
@@ -41,8 +45,10 @@ class BidirectionalDijkstra {
         if (this.g2s.step()) {
             x = this.g2s.orderVisited[this.g2s.orderVisited.length - 1][0]
             y = this.g2s.orderVisited[this.g2s.orderVisited.length - 1][1]
-            if (this.s2g.vis[x][y] == 2)
+            if (this.s2g.vis[x][y] === 2){
+                this.f = 1;
                 return false;
+            }
             this.orderVisited.push([x, y])
             this.par[x][y] = this.g2s.par[x][y]
             goNext = true;
