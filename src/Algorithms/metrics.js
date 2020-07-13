@@ -48,22 +48,28 @@ export function octileMetric(x1,y1,x2,y2,D1=1,D2=Math.sqrt(2))
 }
 
 // Vancouver Distance 
-export function vancouverMetric(a, b)
+export function Vancouver(x1,y1,x2,y2)
 {
-    const x = Math.abs(a[0],b[0])
-    const y = Math.abs(a[1],b[1])
-    let correction=0;
+    var x = Math.abs(x1-x2)
+    var y = Math.abs(y1-y2)
+    var correction=0;
 
     if(x%2!=0)
-    {
-        correction=(a[1]<b[1])?(a[0]%2):(b[0]%2)
+    {   
+        if(y1<y2)
+        {
+        correction=x1%2
+        }
+        else
+        {
+            correction=x2%2
+        }
     }
-    else
-    {
-        correction=0;
+    else{
+        correction=0
     }
-    return ( Math.max(0,y-Math.floor(x/2)) + x - correction )
-
+    var vdistance= Math.max(0,y-Math.floor(x/2)+x-correction)
+    return(vdistance)
 }
 
 // EOD (More metrics will be added )
