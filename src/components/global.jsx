@@ -12,9 +12,11 @@ export default {
 
     bfsButtonId : 1,
     aStarButtonId : 2,
-    djikstraButtonId : 3,
+    dijkstraButtonId : 3,
     bestfsButtonId: 4,
     dfsButtonId:5,
+    bidirectionalBFSButtonId : 6,
+    bidirectionalDijkstraButtonId: 7,
 
     searchPhaseId : 1,
     designPhaseId : -1,

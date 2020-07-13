@@ -7,24 +7,27 @@ import glob from "./global.jsx"
 import BFS from "../Algorithms/bfs.jsx"
 import BestFS from "../Algorithms/bestfs.jsx"
 import Astar from "../Algorithms/astar.jsx"
-import Dijkstra from "../Algorithms/dijkstras.jsx"
-
-
+import Dijkstra from "../Algorithms/dijkstra.jsx"
+import BidirectionalBFS from "../Algorithms/bidirectionalBFS.jsx"
+import bidirectionalDijkstra from '../Algorithms/bidirectionalDijkstra.jsx';
+import BidirectionalDijkstra from '../Algorithms/bidirectionalDijkstra.jsx';
 
 class Agent extends Component {
     state = {
         algo: undefined,
         startStopButton: {id : glob.startSearchButtonId, label:"SEARCH", status: false},
         pauseResumeButton: {id : glob.pauseResumeButtonId, label:"PAUSE", status: false, disable: true},
-        clearWallsButton: {id : glob.clearWallsButtonId, label:"CLEAR WALLS", status: false},
+        clearWallsButton: {id : glob.clearWallsButtonId, label:"CLEAR WALLS / PATH", status: false},
         period: 1,
         neigh: undefined,
         heur: undefined,
         algos : [
           {id : glob.bfsButtonId , label:"BFS" , options: [false, true]},
           {id : glob.aStarButtonId , label:"A*" , options: [true, true]},
-          {id : glob.djikstraButtonId , label:"Djikstra" , options: [false, true]},
+          {id : glob.dijkstraButtonId , label:"Djikstra" , options: [false, true]},
           {id: glob.bestfsButtonId, label: "BestFS", options: [true, true]},
+          {id: glob.bidirectionalBFSButtonId, label: "Bidirecitonal BFS", options: [false, true]},
+          {id: glob.bidirectionalDijkstraButtonId, label: "Bidirecitonal Dijkstra", options: [false, true]},
           // {id : glob.dfsButtonId,label:"DFS",options:[true,true]}
             
         ],
@@ -127,12 +130,14 @@ class Agent extends Component {
                       break;
                   case glob.aStarButtonId:
                     algoItems= new Astar(this.props,this.state.neigh,this.state.heur); break;
-                  case glob.djikstraButtonId:
+                  case glob.dijkstraButtonId:
                     algoItems= new Dijkstra(this.props,this.state.neigh,this.state.heur); break;
+                  case glob.bidirectionalBFSButtonId:
+                    algoItems= new BidirectionalBFS(this.props,this.state.neigh,this.state.heur); break;
+                  case glob.bidirectionalDijkstraButtonId:
+                    algoItems= new BidirectionalDijkstra(this.props,this.state.neigh,this.state.heur); break;
                   default: break;
                 }
-                algoItems.orderVisited = algoItems.orderVisited.reverse();
-                algoItems.orderVisited.pop();
 
                 pause = this.state.pauseResumeButton.status;
 

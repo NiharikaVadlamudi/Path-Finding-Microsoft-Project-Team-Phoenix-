@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import glob from '../components/global.jsx';
 import PQ from './PQ.jsx';
-import {euclideanMetric, manhattanMetric, vancouverMetric} from './metrics.js';
+import { euclideanMetric, manhattanMetric, vancouverMetric } from './metrics.js';
 
 
 class Astar {
 
-  constructor(graph, neigh, heur) {
+  constructor(graph, neigh, heur, exec=true) {
     this.status = graph.gridState.status
     this.beg = graph.gridState.startLoc
     this.end = graph.gridState.targetLoc
@@ -32,11 +32,12 @@ class Astar {
     this.neigh = neigh
     this.orderVisited = []
 
-    return this.execute();
+    if(exec)
+      return this.execute();
   }
 
-  chooseHeuristic(heur){
-    switch(heur){
+  chooseHeuristic(heur) {
+    switch (heur) {
       case glob.ManhattanId: return manhattanMetric;
       case glob.EuclideanId: return euclideanMetric;
       case glob.VancouverId: return vancouverMetric;
@@ -44,7 +45,7 @@ class Astar {
     }
   }
 
-  getActualDist(par, neigh){
+  getActualDist(par, neigh) {
     // return manhattanMetric(par, neigh);
     return 1;
   }
@@ -53,7 +54,7 @@ class Astar {
     return this.metric(a, this.end);
   }
 
-  getG(a){
+  getG(a) {
     return a[1][0] + a[1][1];
   }
 
@@ -74,42 +75,52 @@ class Astar {
       return [[x - 1, y - 1], [x - 1, y], [x, y - 1], [x - 1, y + 1], [x + 1, y - 1], [x, y + 1], [x + 1, y], [x + 1, y + 1]];
   }
 
-  execute() {
-
-    while (this.que.length !== 0 && this.f !== 1) {
-      let cur = this.que.pop()
-      let x = cur[0][0]
-      let y = cur[0][1]
-      let d = cur[1][0]
-      this.vis[x][y] = 2
-      if ((x) === this.end[0] && y === this.end[1]) {
-        this.f = 1
-        break;
-      }
-      this.orderVisited.push(cur[0])
-      let neigh = this.neighbours(x, y);
-      for (let i = 0; i < neigh.length; i++) {
-        let a = neigh[i][0]
-        let b = neigh[i][1]
-        if (this.isValid(a, b) && this.vis[a][b] !== 2 && this.status[a][b] !== glob.wallId) {
-            if(this.vis[a][b] === 0){
-              this.que.push([[a, b], [d + this.getActualDist([x, y], [a, b]), this.getHeuristic([a, b])]]);
-              this.vis[a][b] = 1;
-              this.par[a][b] = [x, y];
-            }
-            else{
-              let ind = this.que.find([a, b]);
-              let newg = d + this.getActualDist([x, y], [a, b])
-              if(this.que.data[ind][1][0] > newg){
-                this.que.data[ind][1][0] = newg;
-                this.que._up(ind);
-                this.par[a][b] = [x, y]
-              }
-            }
+  step() {
+    if(this.que.length === 0 || this.f === 1)
+      return false;
+    let cur = this.que.pop()
+    let x = cur[0][0]
+    let y = cur[0][1]
+    let d = cur[1][0]
+    this.vis[x][y] = 2
+    this.orderVisited.push(cur[0])
+    if ((x) === this.end[0] && y === this.end[1]) {
+      this.f = 1
+      return false;
+    }
+    let neigh = this.neighbours(x, y);
+    for (let i = 0; i < neigh.length; i++) {
+      let a = neigh[i][0]
+      let b = neigh[i][1]
+      if (this.isValid(a, b) && this.vis[a][b] !== 2 && this.status[a][b] !== glob.wallId) {
+        if (this.vis[a][b] === 0) {
+          this.que.push([[a, b], [d + this.getActualDist([x, y], [a, b]), this.getHeuristic([a, b])]]);
+          this.vis[a][b] = 1;
+          this.par[a][b] = [x, y];
+        }
+        else {
+          let ind = this.que.find([a, b]);
+          let newg = d + this.getActualDist([x, y], [a, b])
+          if (this.que.data[ind][1][0] > newg) {
+            this.que.data[ind][1][0] = newg;
+            this.que._up(ind);
+            this.par[a][b] = [x, y]
+          }
         }
       }
     }
-    console.log(this.orderVisited.length)
+    return true;
+  }
+
+  execute() {
+
+    while (true) {
+      if (!this.step())
+        break;
+    }
+    this.orderVisited.pop()
+    this.orderVisited = this.orderVisited.reverse()
+    this.orderVisited.pop()
     return this
   }
 
