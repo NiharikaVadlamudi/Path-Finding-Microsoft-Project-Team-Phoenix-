@@ -119,6 +119,11 @@ class Grid extends Component {
             targetLoc = undefined;
           }
           break;
+          case glob.weightButtonId:
+          if(prevState.status[r][c] === glob.weightId || prevState.status[r][c] === glob.emptyId){
+            clone[r][c] = glob.weightId;      
+            }
+          break;
 
         default: break;
       }
