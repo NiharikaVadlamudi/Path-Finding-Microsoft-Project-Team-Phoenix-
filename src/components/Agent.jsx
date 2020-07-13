@@ -139,6 +139,8 @@ class Agent extends Component {
                     algoItems= new BidirectionalBFS(this.props,this.state.neigh,this.state.heur); break;
                   case glob.bidirectionalDijkstraButtonId:
                     algoItems= new BidirectionalDijkstra(this.props,this.state.neigh,this.state.heur); break;
+                  case glob.biDFSButtonId:
+                    algoItems= new BidirectionalDFS(this.props,this.state.neigh,this.state.heur); break;
                   default: break;
                 }
 
