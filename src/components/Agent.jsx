@@ -11,6 +11,8 @@ import Dijkstra from "../Algorithms/dijkstra.jsx"
 import BidirectionalBFS from "../Algorithms/bidirectionalBFS.jsx"
 import bidirectionalDijkstra from '../Algorithms/bidirectionalDijkstra.jsx';
 import BidirectionalDijkstra from '../Algorithms/bidirectionalDijkstra.jsx';
+import BidirectionalDFS from '../Algorithms/bidirectionalDFS';
+
 
 class Agent extends Component {
     state = {
