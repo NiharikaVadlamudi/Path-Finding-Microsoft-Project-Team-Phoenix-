@@ -1,4 +1,4 @@
-// Bidirectional BFS 
+// Bidirectional BFS
 // Source : GFG
 
 import React, { Component } from 'react';
@@ -25,12 +25,12 @@ class BidirectionalDFS{
     this.startOrdered=[]
     this.endOrdered=[]
 
-    // Two Queues for beg,end nodes 
+    // Two Queues for beg,end nodes
     // We dont'need PQ here..we just need a queue .
     this.startQ=[[this.beg, 0]]
-    
+
     this.endQ=[[this.end, 0]]
-    
+
 
     // Initialising Visited Grid for each seperately.
     this.startVis=[]
@@ -57,7 +57,7 @@ class BidirectionalDFS{
     return this.execute();
   }
 
-  // Regular Functions 
+  // Regular Functions
 
   isWall(x,y)
   {
@@ -77,7 +77,7 @@ class BidirectionalDFS{
   }
 
   checkIntersectionNode()
-  {    
+  {
       // Traverse both the lis ts
     for(let i = 0 ; i < this.rows ;i++)
     {
@@ -94,15 +94,15 @@ class BidirectionalDFS{
 
 
 dfs(stack,vis,path)
-{   
+{
     let cur = stack.shift() // On front deletion
-    
+
     let x = cur[0][0]
     let y = cur[0][1]
     let d = cur[1]
 
     path.push([x,y])
-    
+
     let ngh=this.neighbours(x,y)
 
     for(var i=0;i<ngh.length;i++)
@@ -123,7 +123,7 @@ dfs(stack,vis,path)
 execute()
 {
     while( this.startQ.length!==0 &&  this.endQ.length!==0 && this.flag===false)
-    {   
+    {
         // Apply for start Path
         this.dfs(this.startQ,this.startVis,this.startOrdered)
         // Apply for end Path

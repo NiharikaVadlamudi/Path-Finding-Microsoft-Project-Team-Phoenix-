@@ -58,7 +58,7 @@ class Grid extends Component {
       for (let c = 0; c < cols; c++) {
         td.push(
           <td
-            key={`${r}, ${c}`}
+            id={`${r}, ${c}`}
             className={this.getTdClassName(status[r][c])}
             onMouseOver={() => { return this.props.isMouseDown ? this.handleCellClick(r, c) : false }}
             onMouseDown={() => { this.handleCellClick(r, c) }}
@@ -183,11 +183,18 @@ class Grid extends Component {
     }
   }
 
+  handleAlgo = (order) => {
+    const clone = JSON.parse(JSON.stringify(this.state.status));
+    for(let i = 0; i < order.length; i++){
+      clone[order[i][0]][order[i][1]] = clone[order[i][0]][order[i][1]] === glob.weightId ? glob.visAndWeightId : glob.visId;
+    }
+    this.setState({ status: clone })
+  }
 
   handleStep = (vis) => {
-    const clone = JSON.parse(JSON.stringify(this.state.status));
-    clone[vis[0]][vis[1]] = clone[vis[0]][vis[1]] === glob.weightId ? glob.visAndWeightId : glob.visId;
-    this.setState({ status: clone })
+    document.getElementById(`${vis[0]}, ${vis[1]}`).className = this.getTdClassName(
+      this.state.status[vis[0]][vis[1]] === glob.weightId ? glob.visAndWeightId : glob.visId
+    )
   }
 
   clearLastAlgo = () => {
@@ -245,6 +252,7 @@ class Grid extends Component {
                 handleChecks={this.handleChecks}
                 clearLastAlgo={this.clearLastAlgo}
                 handleclearWalls={this.handleClearWalls}
+                handleAlgo={this.handleAlgo}
               />
             </Col>
           </Row>

@@ -3,15 +3,15 @@ import ReactDOM from 'react-dom'
 
 /*
  * Implementation of all distance metrics that will be useful for alogorithms.
- 1.Euclidien Distance 
- 2.Manhattan Distance 
+ 1.Euclidien Distance
+ 2.Manhattan Distance
  3.Vancuver Distance (Hexagonal)
- 4.Octile Distance 
+ 4.Octile Distance
  5.Chebychev Distance
 */
 
 
-// Euclidean Distance 
+// Euclidean Distance
 
 export function euclideanMetric(a, b)
 {
@@ -28,7 +28,7 @@ export function manhattanMetric(a, b, D=1)
     return(D*dist)
 }
 
-// Chebychev Distance 
+// Chebychev Distance
 
 export function chebychevMetric(a, b,D1=1,D2=1)
 {
@@ -38,7 +38,7 @@ export function chebychevMetric(a, b,D1=1,D2=1)
 }
 
 
-// Octile Distance 
+// Octile Distance
 
 export function octileMetric(x1,y1,x2,y2,D1=1,D2=Math.sqrt(2))
 {
@@ -47,15 +47,15 @@ export function octileMetric(x1,y1,x2,y2,D1=1,D2=Math.sqrt(2))
     return ( D1*(dx+dy) + (D2-2*D1)*(Math.min(dx,dy)) )
 }
 
-// Vancouver Distance 
-export function Vancouver(x1,y1,x2,y2)
+// Vancouver Distance
+export function vancouverMetric(x1,y1,x2,y2)
 {
     var x = Math.abs(x1-x2)
     var y = Math.abs(y1-y2)
     var correction=0;
 
     if(x%2!=0)
-    {   
+    {
         if(y1<y2)
         {
         correction=x1%2

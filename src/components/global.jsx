@@ -19,7 +19,8 @@ export default {
     dfsButtonId:5,
     bidirectionalBFSButtonId : 6,
     bidirectionalDijkstraButtonId: 7,
-    biDFSButtonId:8,
+    DFSButtonId: 8,
+    bidirectionalDFSButtonId: 9,
 
     searchPhaseId : 1,
     designPhaseId : -1,

@@ -3,7 +3,7 @@ import glob from '../components/global.jsx'
 import TinyQueue from 'tinyqueue';
 //import {euclideanMetric, manhattanMetric, vancouverMetric} from './metrics.js';
 
-class BFS{
+class DFS{
 
   constructor(graph, neigh, heur){
     this.status = graph.gridState.status
@@ -47,7 +47,7 @@ class BFS{
 
     while(this.que.length!== 0 && this.f !== 1)
     {
-      let cur = this.que.pop() //pop from front 
+      let cur = this.que.pop() //pop from front
       this.orderVisited.push(cur[0])
       let x = cur[0][0]
       let y = cur[0][1]
@@ -76,4 +76,4 @@ class BFS{
 
 }
 
-export default BFS;
+export default DFS;
