@@ -5,6 +5,8 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import glob from './global.jsx'
 import Select from 'react-select'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Tooltip from 'react-bootstrap/Tooltip'
 
 class AccordionElement extends Component {
 
@@ -22,9 +24,9 @@ class AccordionElement extends Component {
     this.state.id = this.props.id
     if (this.props.options[0]) {
       this.state.heuristics = [
-        { value: glob.ManhattanId, label: "Manhattan" },
-        { value: glob.EuclideanId, label: "Euclidean" },
-        { value: glob.VancouverId, label: "Vancouver" },
+        { value: glob.ManhattanId, label: "Manhattan", info: glob.manhattanInfo },
+        { value: glob.EuclideanId, label: "Euclidean", info: glob.euclideanInfo },
+        { value: glob.VancouverId, label: "Vancouver", info: glob.vancouverInfo },
       ];
       this.state.selectedHeuristic = this.state.heuristics[0]
     }
@@ -74,17 +76,24 @@ class AccordionElement extends Component {
     let details = undefined
     if (this.props.options[0]) {
       details = <div style={{ width: '10rem' }}>
+                            <div style={{ color:  '#7c7a79', fontSize: '16px',}} >
+                            Distance Metric :
+                            </div>
                             <Select
                               options={this.state.heuristics}
                               isDisabled={this.props.canSelectOptions}
                               defaultValue={this.state.selectedHeuristic}
                               onChange={this.handleHeuristicChange}
                             />
+                            <hr />
                             {details}
                           </div>
     }
     if(this.props.options[1]){
       details = <div  style={{ width: '10rem' }}>
+                            <div style={{ color:  '#7c7a79', fontSize: '16px',}} >
+                            Neighbour Metric :
+                            </div>
                             <Select
                               options={this.state.neighbourhood}
                               isDisabled={this.props.canSelectOptions}
@@ -105,7 +114,18 @@ class AccordionElement extends Component {
             aria-controls="panel1bh-content"
             id="panel1bh-header"
           >
+          <OverlayTrigger
+          placement="left"
+          delay={{ show: 250, hide: 400 }}
+          overlay={
+            <Tooltip id="button-tooltip" {...this.props}>
+              {this.props.info}
+            </Tooltip>
+          }
+          >
             <div className={classes}>{this.props.label}</div>
+          </OverlayTrigger>
+
           </AccordionSummary>
 
           <AccordionDetails >

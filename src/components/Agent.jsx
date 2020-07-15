@@ -26,14 +26,14 @@ class Agent extends Component {
       neigh: undefined,
       heur: undefined,
       algos: [
-        { id: glob.bfsButtonId, label: "BFS", options: [false, true] },
-        { id: glob.aStarButtonId, label: "A*", options: [true, true] },
-        { id: glob.dijkstraButtonId, label: "Djikstra", options: [false, true] },
-        { id: glob.bestfsButtonId, label: "BestFS", options: [true, true] },
-        { id: glob.bidirectionalBFSButtonId, label: "Bidirectional BFS", options: [false, true] },
-        { id: glob.bidirectionalDijkstraButtonId, label: "Bidirectional Dijkstra", options: [false, true] },
-        {id : glob.dfsButtonId,label:"DFS",options:[false,true]},
-        {id: glob.bidirectionalDFSButtonId, label: "Bidirectional DFS", options: [false,true]},
+        { id: glob.bfsButtonId, label: "BFS", options: [false, true], info: glob.bfsInfo },
+        { id: glob.aStarButtonId, label: "A*", options: [true, true], info: glob.aStarInfo },
+        { id: glob.dijkstraButtonId, label: "Djikstra", options: [false, true], info: glob.dijkstraInfo },
+        { id: glob.bestfsButtonId, label: "BestFS", options: [true, true], info: glob.bestfsInfo },
+        { id: glob.bidirectionalBFSButtonId, label: "Bidirectional BFS", options: [false, true], info: glob.bidirectionalBFSInfo },
+        { id: glob.bidirectionalDijkstraButtonId, label: "Bidirectional Dijkstra", options: [false, true], info: glob.bidirectionalDijkstraInfo },
+        {id : glob.dfsButtonId,label:"DFS",options:[false,true], info: glob.dfsInfo},
+        {id: glob.bidirectionalDFSButtonId, label: "Bidirectional DFS", options: [false,true], info:glob.bidirectionalDFSInfo},
       ],
     }
     this.order = [];
@@ -199,6 +199,7 @@ class Agent extends Component {
             curAlgo={this.state.algo}
             id={el.id}
             label={el.label}
+            info={el.info}
             options={el.options}
             onSelectOption={this.handleSelectAlgo}
             canSelectOptions={this.state.startStopButton.status}
