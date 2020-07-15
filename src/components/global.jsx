@@ -21,6 +21,7 @@ export default {
     bidirectionalDijkstraButtonId: 7,
     DFSButtonId: 8,
     bidirectionalDFSButtonId: 9,
+    bidirectionalAstarButtonId: 10,
 
     searchPhaseId : 1,
     designPhaseId : -1,
@@ -42,6 +43,7 @@ export default {
     dijkstraInfo: "Algorithm for finding the shortest path from source vertex to all vertices in a given graph.",
     bidirectionalDFSInfo: "Unlike normal DFS where the search begins in one direction, here the search starts in both directions simultaneously from source to goal vertex. The recursive algorithm starts at the root node and explores as far as possible along each branch before backtracking.",
     bidirectionalBFSInfo: "Unlike normal BFS where the search begins in one direction, here the search starts in both directions simultaneously from source to goal vertex. The traversal goes on layerwise ie. from source node to directly connected nodes and further to the next level neighbour nodes.",
+    bidirectionalAstarInfo: "Unlike normal BFS where the search begins in one direction, here the search starts in both directions simultaneously from source to goal vertex. The traversal goes on layerwise ie. from source node to directly connected nodes and further to the next level neighbour nodes.",
     bidirectionalDijkstraInfo: "Likhdo iska koi pls",
     dfsInfo: "A traversing recursive algorithm that starts at the root node and explores as far as possible along each branch before backtracking.",
 

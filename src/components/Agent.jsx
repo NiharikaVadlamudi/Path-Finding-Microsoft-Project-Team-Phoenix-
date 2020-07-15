@@ -12,6 +12,7 @@ import Dijkstra from "../Algorithms/dijkstra.jsx"
 import BidirectionalBFS from "../Algorithms/bidirectionalBFS.jsx"
 import BidirectionalDijkstra from '../Algorithms/bidirectionalDijkstra.jsx'
 import BidirectionalDFS from '../Algorithms/bidirectionalDFS.jsx'
+import BidirectionalAstar from '../Algorithms/bidirectionalAstar.jsx'
 
 class Agent extends Component {
 
@@ -34,6 +35,7 @@ class Agent extends Component {
         { id: glob.bidirectionalDijkstraButtonId, label: "Bidirectional Dijkstra", options: [false, true], info: glob.bidirectionalDijkstraInfo },
         {id : glob.dfsButtonId,label:"DFS",options:[false,true], info: glob.dfsInfo},
         {id: glob.bidirectionalDFSButtonId, label: "Bidirectional DFS", options: [false,true], info:glob.bidirectionalDFSInfo},
+        {id: glob.bidirectionalAstarButtonId, label: "Bidirectional A*", options: [true,true], info:glob.bidirectionalAstarInfo},
       ],
     }
     this.order = [];
@@ -145,6 +147,8 @@ class Agent extends Component {
             algoItems = new DFS(this.props, this.state.neigh, this.state.heur); break;
           case glob.bidirectionalDFSButtonId:
             algoItems = new BidirectionalDFS(this.props, this.state.neigh, this.state.heur); break;
+          case glob.bidirectionalAstarButtonId:
+            algoItems = new BidirectionalAstar(this.props, this.state.neigh, this.state.heur); break;
           default: break;
         }
 
