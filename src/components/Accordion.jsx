@@ -14,7 +14,7 @@ class AccordionElement extends Component {
     id: undefined,
     selectedHeuristic: undefined,
     selectedNeighbourhood: undefined,
-    details: <p></p>
+    // details: <p></p>
   }
 
   constructor(props) {
@@ -27,14 +27,6 @@ class AccordionElement extends Component {
         { value: glob.VancouverId, label: "Vancouver" },
       ];
       this.state.selectedHeuristic = this.state.heuristics[0]
-      this.state.details = <div>
-                            <Select 
-                              options={this.state.heuristics}
-                              defaultValue={this.state.selectedHeuristic}
-                              onChange={this.handleHeuristicChange}              
-                            />
-                            {this.state.details}
-                          </div>
     }
     if(this.props.options[1]){
       this.state.neighbourhood = [
@@ -42,23 +34,11 @@ class AccordionElement extends Component {
         { value: 8, label: "8" }
       ]
       this.state.selectedNeighbourhood = this.state.neighbourhood[0]
-      this.state.details = <div>
-                            <Select 
-                              options={this.state.neighbourhood}
-                              defaultValue={this.state.selectedNeighbourhood}
-                              onChange={this.handleNeighbourhoodChange}              
-                            />
-                            <hr />
-                            {this.state.details}
-                          </div>
     }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    // console.log("p", nextProps.curAlgo != this.props.curAlgo)
-    // console.log("s", nextState !== this.state)
-    // console.log(nextProps, this.props)
-    return nextProps.curAlgo != this.props.curAlgo || nextState != this.state
+    return (nextProps.curAlgo != this.props.curAlgo || nextState != this.state || this.props.canSelectOptions != nextProps.canSelectOptions)
   }
 
   isActive() {
@@ -67,25 +47,56 @@ class AccordionElement extends Component {
 
   handleHeuristicChange = (e) => {
     this.props.onSelectOption(this.state.id, e, this.state.selectedNeighbourhood)(undefined, undefined)
-    this.setState({ selectedHeuristic: e });
+    if(this.props.canSelectOptions === false)
+    {
+      this.setState({ selectedHeuristic: e });
+    }
   }
 
   handleNeighbourhoodChange = (e) => {
     this.props.onSelectOption(this.state.id, this.state.selectedHeuristic, e)(undefined, undefined)
-    this.setState({ selectedNeighbourhood: e });
+    if(this.props.canSelectOptions === false)
+    {
+      this.setState({ selectedNeighbourhood: e });
+    }
   }
 
   render() {
-    console.log("acc rendered")
-    let classes = "btn btn-lg btn-outline-";
+    // console.log("acc rendered")
+    let classes = "btn btn-sm btn-block btn-";
     if (this.isActive()) {
       classes += "primary";
     }
     else {
-      classes += "secondary";
+      classes += "outline-secondary";
+    }
+
+    let details = undefined
+    if (this.props.options[0]) {
+      details = <div style={{ width: '10rem' }}>
+                            <Select
+                              options={this.state.heuristics}
+                              isDisabled={this.props.canSelectOptions}
+                              defaultValue={this.state.selectedHeuristic}
+                              onChange={this.handleHeuristicChange}
+                            />
+                            {details}
+                          </div>
+    }
+    if(this.props.options[1]){
+      details = <div  style={{ width: '10rem' }}>
+                            <Select
+                              options={this.state.neighbourhood}
+                              isDisabled={this.props.canSelectOptions}
+                              defaultValue={this.state.selectedNeighbourhood}
+                              onChange={this.handleNeighbourhoodChange}
+                            />
+                            <hr />
+                            {details}
+                          </div>
     }
     return (
-      <Card style={{ width: '12rem' }}>
+      <Card style={{ width: '12rem'}}>
         <Accordion
           expanded={this.isActive()}
           onChange={this.props.onSelectOption(this.state.id, this.state.selectedHeuristic, this.state.selectedNeighbourhood)}
@@ -97,8 +108,8 @@ class AccordionElement extends Component {
             <div className={classes}>{this.props.label}</div>
           </AccordionSummary>
 
-          <AccordionDetails>
-            {this.state.details}
+          <AccordionDetails >
+            {details}
           </AccordionDetails>
         </Accordion>
       </Card>

@@ -201,6 +201,7 @@ class Agent extends Component {
             label={el.label}
             options={el.options}
             onSelectOption={this.handleSelectAlgo}
+            canSelectOptions={this.state.startStopButton.status}
           />
         )}
 
