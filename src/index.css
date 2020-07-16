@@ -39,3 +39,39 @@ td.vis{
 td.visWeight{
   background-color: yellow;
 }
+
+div.legend {
+  float: left;
+  width: 20px;
+  height: 20px;
+  margin: 5px;
+  border: 1px solid rgba(0, 0, 0, .2);
+}
+
+div.wall{
+  background-color: #0000ff;
+}
+
+div.empty{
+  background-color: aqua;
+}
+
+div.start{
+  background-color: red;
+}
+
+div.target{
+  background-color: green;
+}
+
+div.weight{
+  background-color: blueviolet;
+}
+
+div.vis{
+  background-color: grey;
+}
+
+div.visWeight{
+  background-color: yellow;
+}

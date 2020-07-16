@@ -16,7 +16,7 @@ class AccordionElement extends Component {
     id: undefined,
     selectedHeuristic: undefined,
     selectedNeighbourhood: undefined,
-    // details: <p></p>
+    
   }
 
   constructor(props) {

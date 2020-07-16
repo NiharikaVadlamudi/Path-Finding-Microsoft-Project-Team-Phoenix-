@@ -5,6 +5,12 @@ import Agent from "./Agent.jsx"
 import Row from 'react-bootstrap/Row'
 import Container from 'react-bootstrap/Container'
 import Col from 'react-bootstrap/Col'
+import Modal from 'react-bootstrap/Modal';
+import ModalDialog from 'react-bootstrap/ModalDialog';
+import ModalHeader from 'react-bootstrap/ModalHeader';
+import ModalTitle from 'react-bootstrap/ModalTitle';
+import ModalBody from 'react-bootstrap/ModalBody';
+import ModalFooter from 'react-bootstrap/ModalFooter';
 
 class Grid extends Component {
   state = {
@@ -22,6 +28,8 @@ class Grid extends Component {
       { id: glob.targetButtonId, label: "ADD TARGET", status: false, disable: false },
       { id: glob.weightButtonId, label: "ADD WEIGHT", status: false, disable: false },
     ],
+    showModal: false,
+    ModalMessage: "",
 
   }
 
@@ -122,7 +130,7 @@ class Grid extends Component {
           break;
           case glob.weightButtonId:
           if(prevState.status[r][c] === glob.emptyId){
-            clone[r][c] = glob.weightId;      
+            clone[r][c] = glob.weightId;
           }
           else if(prevState.status[r][c] === glob.weightId){
             clone[r][c] = glob.emptyId;
@@ -229,10 +237,19 @@ class Grid extends Component {
 
     }
     else {
-      alert("Stop algo before clearing walls")
+      this.setModalValues("Stop algo before clearing walls")
     }
   }
 
+  handleClose = () =>
+  {
+    this.setState({showModal:false});
+  }
+
+  setModalValues = (message) =>
+  {
+    this.setState({ showModal:true, ModalMessage:message })
+  }
   render() {
     return (
       <React.Fragment>
@@ -241,6 +258,37 @@ class Grid extends Component {
             el => <Button key={el.id} el={el} onSelectOption={this.handleSelectDrawMode} />
           )}
         </span>
+        <div className="d-flex flex-row flex-wrap m-2 justify-content-around">
+       		<div className="d-flex p-2">
+       			<div className="legend wall"></div>
+       			<div> Wall</div>
+       		</div>
+       		<div className="d-flex p-2">
+       			<div className="legend start"></div>
+       			<div>Start</div>
+       		</div>
+       		<div className="d-flex p-2">
+       			<div className="legend target">    </div>
+       			<div>Target</div>
+       		</div>
+          <div className="d-flex p-2">
+       			<div className="legend weight"></div>
+       			<div>Weights</div>
+       		</div>
+          <div className="d-flex p-2">
+       			<div className="legend vis"></div>
+       			<div>Visited</div>
+       		</div>
+          <div className="d-flex p-2">
+       			<div className="legend empty"></div>
+       			<div>Not Visited</div>
+       		</div>
+          <div className="d-flex p-2">
+       			<div className="legend visWeight"></div>
+       			<div>Visited weight</div>
+       		</div>
+
+ 	      </div>
         <Container>
           <Row>
             <Col md={{ span: 4 }}>{this.getBoard()}</Col>
@@ -253,10 +301,23 @@ class Grid extends Component {
                 clearLastAlgo={this.clearLastAlgo}
                 handleclearWalls={this.handleClearWalls}
                 handleAlgo={this.handleAlgo}
+                setModalValues={this.setModalValues}
               />
             </Col>
           </Row>
         </Container>
+
+        <Modal show={this.state.showModal} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Warning!</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{this.state.ModalMessage}</Modal.Body>
+          <Modal.Footer>
+            <button variant="secondary" onClick={this.handleClose}>
+              Close
+            </button>
+          </Modal.Footer>
+        </Modal>
 
       </React.Fragment>
     );

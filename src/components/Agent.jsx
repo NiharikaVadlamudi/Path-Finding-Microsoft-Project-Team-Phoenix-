@@ -37,6 +37,7 @@ class Agent extends Component {
         {id: glob.bidirectionalDFSButtonId, label: "Bidirectional DFS", options: [false,true], info:glob.bidirectionalDFSInfo},
         {id: glob.bidirectionalAstarButtonId, label: "Bidirectional A*", options: [true,true], info:glob.bidirectionalAstarInfo},
       ],
+
     }
     this.order = [];
   }
@@ -46,9 +47,11 @@ class Agent extends Component {
     if (startStopButton.status === false) {
       this.props.clearLastAlgo();
       if (this.props.gridState.targetLoc === undefined || this.props.gridState.startLoc === undefined || this.state.algo === undefined) {
-        alert(this.state.algo)
+        // alert(this.state.algo)
         // this.resetAlgos();
+        this.props.setModalValues("set start/target/algo")
         this.props.handleChecks();
+
       }
       else {
         startStopButton.status = true;
@@ -76,7 +79,7 @@ class Agent extends Component {
 
   handlePauseResume = (button) => {
     if (this.state.startStopButton.status === false) {
-      alert("This button is disabled rn")
+      this.props.setModalValues("Button disabled when algo is not running")
     }
     else {
       var pauseResumeButton = JSON.parse(JSON.stringify(this.state.pauseResumeButton));
@@ -90,7 +93,6 @@ class Agent extends Component {
     var pauseResumeButton = JSON.parse(JSON.stringify(this.state.pauseResumeButton));
     pauseResumeButton.disable = !pauseResumeButton.disable;
     if (this.state.startStopButton.status) {
-      // console.log(this.state.startStopButton.status)
       pauseResumeButton.label = "PAUSE";
       pauseResumeButton.status = false;
 
@@ -190,6 +192,8 @@ class Agent extends Component {
     clearInterval(this.periodicStep);
   }
 
+
+
   render() {
     // console.log("agent rerender", this.algo, this.heur, this.neigh)
     return (
@@ -197,6 +201,7 @@ class Agent extends Component {
         <Button el={this.state.startStopButton} onSelectOption={this.handleStartStop} />
         <Button el={this.state.pauseResumeButton} onSelectOption={this.handlePauseResume} />
         <Button el={this.state.clearWallsButton} onSelectOption={this.props.handleclearWalls} />
+
 
         {this.state.algos.map(el =>
           <AccordionElement
