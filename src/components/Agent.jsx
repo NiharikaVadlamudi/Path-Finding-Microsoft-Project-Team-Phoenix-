@@ -27,16 +27,17 @@ class Agent extends Component {
       neigh: undefined,
       heur: undefined,
       algos: [
-        { id: glob.bfsButtonId, label: "BFS", options: [false, true], info: glob.bfsInfo },
-        { id: glob.aStarButtonId, label: "A*", options: [true, true], info: glob.aStarInfo },
-        { id: glob.dijkstraButtonId, label: "Djikstra", options: [false, true], info: glob.dijkstraInfo },
-        { id: glob.bestfsButtonId, label: "BestFS", options: [true, true], info: glob.bestfsInfo },
-        { id: glob.bidirectionalBFSButtonId, label: "Bidirectional BFS", options: [false, true], info: glob.bidirectionalBFSInfo },
-        { id: glob.bidirectionalDijkstraButtonId, label: "Bidirectional Dijkstra", options: [false, true], info: glob.bidirectionalDijkstraInfo },
-        {id : glob.dfsButtonId,label:"DFS",options:[false,true], info: glob.dfsInfo},
-        {id: glob.bidirectionalDFSButtonId, label: "Bidirectional DFS", options: [false,true], info:glob.bidirectionalDFSInfo},
-        {id: glob.bidirectionalAstarButtonId, label: "Bidirectional A*", options: [true,true], info:glob.bidirectionalAstarInfo},
+        { id: glob.bfsButtonId, label: "BFS", options: [false, true, true], info: glob.bfsInfo },
+        { id: glob.aStarButtonId, label: "A*", options: [true, true, true], info: glob.aStarInfo },
+        { id: glob.dijkstraButtonId, label: "Djikstra", options: [false, true, true], info: glob.dijkstraInfo },
+        { id: glob.bestfsButtonId, label: "BestFS", options: [true, true, false], info: glob.bestfsInfo },
+        { id : glob.dfsButtonId,label:"DFS",options:[false,true,true], info: glob.dfsInfo},
+        // { id: glob.bidirectionalBFSButtonId, label: "Bidirectional BFS", options: [false, true], info: glob.bidirectionalBFSInfo },
+        // { id: glob.bidirectionalDijkstraButtonId, label: "Bidirectional Dijkstra", options: [false, true], info: glob.bidirectionalDijkstraInfo },
+        // {id: glob.bidirectionalDFSButtonId, label: "Bidirectional DFS", options: [false,true], info:glob.bidirectionalDFSInfo},
+        // {id: glob.bidirectionalAstarButtonId, label: "Bidirectional A*", options: [true,true], info:glob.bidirectionalAstarInfo},
       ],
+      checkBidirectional: undefined
 
     }
     this.order = [];
@@ -47,8 +48,6 @@ class Agent extends Component {
     if (startStopButton.status === false) {
       this.props.clearLastAlgo();
       if (this.props.gridState.targetLoc === undefined || this.props.gridState.startLoc === undefined || this.state.algo === undefined) {
-        // alert(this.state.algo)
-        // this.resetAlgos();
         this.props.setModalValues("set start/target/algo")
         this.props.handleChecks();
 
@@ -100,10 +99,12 @@ class Agent extends Component {
     this.setState({ pauseResumeButton });
   }
 
-  handleSelectAlgo = (key, heur, neigh) => (event, isExpanded) => {
+  handleSelectAlgo = (key, heur, neigh, checkBidirectional) => (event, isExpanded) => {
     if (!this.props.gridState.drawAllowed) return;
     if (isExpanded === undefined || isExpanded === true) {
+
       this.setState({
+        checkBidirectional: (checkBidirectional),
         algo: key,
         heur: (heur ? heur.value : this.state.heur),
         neigh: (neigh ? neigh.value : this.state.neigh)
@@ -131,26 +132,41 @@ class Agent extends Component {
       if (searching) {
         // init algo and set it to step periodically
         let algoItems = undefined
+        // alert(this.state.checkBidirectional)
         switch (this.state.algo) {
+
           case glob.bfsButtonId:
-            algoItems = new BFS(this.props, this.state.neigh, this.state.heur); break;
+            if(this.state.checkBidirectional)
+              algoItems = new BidirectionalBFS(this.props, this.state.neigh, this.state.heur);
+            else
+              algoItems = new BFS(this.props, this.state.neigh, this.state.heur);
+            break;
+
           case glob.bestfsButtonId:
             algoItems = new BestFS(this.props, this.state.neigh, this.state.heur); break;
             break;
+
           case glob.aStarButtonId:
-            algoItems = new Astar(this.props, this.state.neigh, this.state.heur); break;
+            if(this.state.checkBidirectional)
+              algoItems = new BidirectionalAstar(this.props, this.state.neigh, this.state.heur);
+            else
+              algoItems = new Astar(this.props, this.state.neigh, this.state.heur);
+            break;
+
           case glob.dijkstraButtonId:
-            algoItems = new Dijkstra(this.props, this.state.neigh, this.state.heur); break;
-          case glob.bidirectionalBFSButtonId:
-            algoItems = new BidirectionalBFS(this.props, this.state.neigh, this.state.heur); break;
-          case glob.bidirectionalDijkstraButtonId:
-            algoItems = new BidirectionalDijkstra(this.props, this.state.neigh, this.state.heur); break;
+            if(this.state.checkBidirectional)
+              algoItems = new BidirectionalDijkstra(this.props, this.state.neigh, this.state.heur);
+            else
+              algoItems = new Dijkstra(this.props, this.state.neigh, this.state.heur);
+            break;
+
           case glob.DFSButtonId:
-            algoItems = new DFS(this.props, this.state.neigh, this.state.heur); break;
-          case glob.bidirectionalDFSButtonId:
-            algoItems = new BidirectionalDFS(this.props, this.state.neigh, this.state.heur); break;
-          case glob.bidirectionalAstarButtonId:
-            algoItems = new BidirectionalAstar(this.props, this.state.neigh, this.state.heur); break;
+          if(this.state.checkBidirectional)
+            algoItems = new BidirectionalDFS(this.props, this.state.neigh, this.state.heur);
+          else
+            algoItems = new DFS(this.props, this.state.neigh, this.state.heur);
+          break;
+
           default: break;
         }
 

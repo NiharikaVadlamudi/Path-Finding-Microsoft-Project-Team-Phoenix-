@@ -7,6 +7,9 @@ import glob from './global.jsx'
 import Select from 'react-select'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tooltip from 'react-bootstrap/Tooltip'
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import Grid from '@material-ui/core/Grid';
 
 class AccordionElement extends Component {
 
@@ -16,7 +19,7 @@ class AccordionElement extends Component {
     id: undefined,
     selectedHeuristic: undefined,
     selectedNeighbourhood: undefined,
-    
+    checkBidirectional: undefined,
   }
 
   constructor(props) {
@@ -37,6 +40,10 @@ class AccordionElement extends Component {
       ]
       this.state.selectedNeighbourhood = this.state.neighbourhood[0]
     }
+    if(this.props.options[2]){
+      this.state.checkBidirectional = false
+    }
+
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -48,7 +55,7 @@ class AccordionElement extends Component {
   }
 
   handleHeuristicChange = (e) => {
-    this.props.onSelectOption(this.state.id, e, this.state.selectedNeighbourhood)(undefined, undefined)
+    this.props.onSelectOption(this.state.id, e, this.state.selectedNeighbourhood, this.state.checkBidirectional)(undefined, undefined)
     if(this.props.canSelectOptions === false)
     {
       this.setState({ selectedHeuristic: e });
@@ -56,10 +63,19 @@ class AccordionElement extends Component {
   }
 
   handleNeighbourhoodChange = (e) => {
-    this.props.onSelectOption(this.state.id, this.state.selectedHeuristic, e)(undefined, undefined)
+    this.props.onSelectOption(this.state.id, this.state.selectedHeuristic, e, this.state.checkBidirectional)(undefined, undefined)
     if(this.props.canSelectOptions === false)
     {
       this.setState({ selectedNeighbourhood: e });
+    }
+  }
+
+  handleBidirectionalOption = () => {
+    let check = this.state.checkBidirectional;
+    this.props.onSelectOption(this.state.id, this.state.selectedHeuristic, this.state.selectedNeighbourhood, !check)(undefined, undefined)
+    if(this.props.canSelectOptions === false)
+    {
+      this.setState({checkBidirectional: !check})
     }
   }
 
@@ -104,11 +120,28 @@ class AccordionElement extends Component {
                             {details}
                           </div>
     }
+    if(this.props.options[2]!==undefined && this.props.options[2]){
+      details = <div>
+                {details}
+                <hr/>
+                <div style={{ color:  '#7c7a79', fontSize: '16px',}} >
+                Bidirectional Search:
+                </div>
+                <Grid component="label" container alignItems="center" spacing={1}>
+                <Grid item>Off</Grid>
+                <Grid item>
+
+                <Switch color="primary" disabled={this.props.canSelectOptions} checked={this.state.checkBidirectional} onChange={this.handleBidirectionalOption} name="checkedA" />
+                </Grid>
+                <Grid item>On</Grid>
+                </Grid>
+                </div>
+    }
     return (
       <Card style={{ width: '12rem'}}>
         <Accordion
           expanded={this.isActive()}
-          onChange={this.props.onSelectOption(this.state.id, this.state.selectedHeuristic, this.state.selectedNeighbourhood)}
+          onChange={this.props.onSelectOption(this.state.id, this.state.selectedHeuristic, this.state.selectedNeighbourhood, this.state.checkBidirectional)}
         >
           <AccordionSummary
             aria-controls="panel1bh-content"

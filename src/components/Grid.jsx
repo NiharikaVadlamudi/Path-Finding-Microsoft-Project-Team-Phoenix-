@@ -289,6 +289,7 @@ class Grid extends Component {
        		</div>
 
  	      </div>
+        
         <Container>
           <Row>
             <Col md={{ span: 4 }}>{this.getBoard()}</Col>
