@@ -11,6 +11,8 @@ export default {
     visId: 4,
     weightId: 5,
     visAndWeightId: 6,
+    pathId: 7,
+    pathAndWeightId: 8,
 
     bfsButtonId : 1,
     aStarButtonId : 2,
@@ -35,7 +37,8 @@ export default {
     EuclideanId: 2,
     VancouverId: 3,
 
-    weightVal: 5,
+    weightVal: 10,
+    normalVal: 1,
 
     bfsInfo: "A traversing algorithm where you start from the start node and traverse the graph layerwise ie. from source node to directly connected nodes and further to the next level neighbour nodes.",
     bestfsInfo: "Unlike BFS and DFS, it uses an evaluation function to decide which adjacent node is most promising and then explore. Best FS falls in the criteria of heuristic search or informed search.",

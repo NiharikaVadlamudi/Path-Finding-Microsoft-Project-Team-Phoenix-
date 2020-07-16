@@ -54,6 +54,8 @@ class Grid extends Component {
       case glob.visId: return "vis";
       case glob.weightId: return "weight";
       case glob.visAndWeightId: return "visWeight";
+      case glob.pathId: return "path";
+      case glob.pathAndWeightId: return "pathWeight";
       default: break;
     }
   }
@@ -191,27 +193,37 @@ class Grid extends Component {
     }
   }
 
-  handleAlgo = (order) => {
+  handleAlgo = (order, path) => {
     const clone = JSON.parse(JSON.stringify(this.state.status));
     for(let i = 0; i < order.length; i++){
       clone[order[i][0]][order[i][1]] = clone[order[i][0]][order[i][1]] === glob.weightId ? glob.visAndWeightId : glob.visId;
     }
+    for(let i = 0; i < path.length; i++){
+      clone[path[i][0]][path[i][1]] = clone[path[i][0]][path[i][1]] === glob.visAndWeightId ? glob.pathAndWeightId : glob.pathId;
+    }
     this.setState({ status: clone })
   }
 
-  handleStep = (vis) => {
-    document.getElementById(`${vis[0]}, ${vis[1]}`).className = this.getTdClassName(
-      this.state.status[vis[0]][vis[1]] === glob.weightId ? glob.visAndWeightId : glob.visId
-    )
+  handleStep = (vis, path) => {
+    if(!path){
+      document.getElementById(`${vis[0]}, ${vis[1]}`).className = this.getTdClassName(
+        this.state.status[vis[0]][vis[1]] === glob.weightId ? glob.visAndWeightId : glob.visId
+      )
+    }
+    else{
+      document.getElementById(`${vis[0]}, ${vis[1]}`).className = this.getTdClassName(
+        this.state.status[vis[0]][vis[1]] === glob.weightId ? glob.pathAndWeightId : glob.pathId
+      )
+    }
   }
 
   clearLastAlgo = () => {
     const clone = JSON.parse(JSON.stringify(this.state.status));
     for (let i = 0; i < this.state.rows; i++) {
       for (let j = 0; j < this.state.cols; j++) {
-        if (clone[i][j] === glob.visId)
+        if (clone[i][j] === glob.visId || clone[i][j] === glob.pathId)
           clone[i][j] = glob.emptyId;
-        else if(clone[i][j] === glob.visAndWeightId)
+        else if(clone[i][j] === glob.visAndWeightId || clone[i][j] === glob.pathAndWeightId)
           clone[i][j] = glob.weightId;
       }
     }
@@ -251,6 +263,7 @@ class Grid extends Component {
     this.setState({ showModal:true, ModalMessage:message })
   }
   render() {
+    console.log(this.state.status[2][6])
     return (
       <React.Fragment>
         <span>

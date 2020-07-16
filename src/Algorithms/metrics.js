@@ -15,7 +15,7 @@ import ReactDOM from 'react-dom'
 
 export function euclideanMetric(a, b)
 {
-    const dist = Math.pow((a[0]-b[0]),2) + Math.pow((a[1]-b[1]),2)
+    const dist = Math.sqrt(Math.pow((a[0]-b[0]),2) + Math.pow((a[1]-b[1]),2))
     return(dist)
 }
 

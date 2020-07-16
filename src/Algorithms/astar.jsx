@@ -1,21 +1,14 @@
-import React, { Component } from 'react';
 import glob from '../components/global.jsx';
 import PQ from './PQ.jsx';
-import { euclideanMetric, manhattanMetric, vancouverMetric } from './metrics.js';
+import Algorithm from "./algorithm.jsx"
 
-
-class Astar {
+class Astar extends Algorithm {
 
   constructor(graph, neigh, heur, exec=true) {
-    this.status = graph.gridState.status
-    this.beg = graph.gridState.startLoc
-    this.end = graph.gridState.targetLoc
-    this.rows = this.status.length
-    this.cols = this.status[0].length
-    this.vis = []
-    this.par = []
-    this.metric = this.chooseHeuristic(heur)
+    
+    super(graph, neigh, heur);
 
+    // setting up additional params and variables
     for (let i = 0; i < this.rows; i++) {
       this.par[i] = []
       this.vis[i] = []
@@ -24,60 +17,39 @@ class Astar {
         this.par[i][j] = [i, j];
       }
     }
-    this.f = 0;
     this.que = new PQ(
       [[this.beg, [0, this.getHeuristic(this.beg)]]],
       this.compare
     )
-    this.neigh = neigh
-    this.orderVisited = []
 
+    // run on creation
     if(exec)
       return this.execute();
   }
 
-  chooseHeuristic(heur) {
-    switch (heur) {
-      case glob.ManhattanId: return manhattanMetric;
-      case glob.EuclideanId: return euclideanMetric;
-      case glob.VancouverId: return vancouverMetric;
-      default: break;
-    }
-  }
-
-  getActualDist(par, neigh) {
-    // return manhattanMetric(par, neigh);
-    return 1;
-  }
-
   getHeuristic = (a) => {
+    // get estimated distance
     return this.metric(a, this.end);
   }
 
   getG(a) {
+    // get A* heuristic value 
+    // f = g + h
     return a[1][0] + a[1][1];
   }
 
   compare = (a, b) => {
+    // compare function for queue ordering
     a = this.getG(a)
     b = this.getG(b)
     return a < b ? -1 : a > b ? 1 : 0;
   }
 
-  isValid(x, y) {
-    return x < this.rows && x >= 0 && y < this.cols && y >= 0;
-  }
-
-  neighbours(x, y) {
-    if (this.neigh == 4)
-      return [[x - 1, y], [x, y - 1], [x, y + 1], [x + 1, y]];
-    else
-      return [[x - 1, y - 1], [x - 1, y], [x, y - 1], [x - 1, y + 1], [x + 1, y - 1], [x, y + 1], [x + 1, y], [x + 1, y + 1]];
-  }
-
   step() {
+    // one step of search
     if(this.que.length === 0 || this.f === 1)
       return false;
+
     let cur = this.que.pop()
     let x = cur[0][0]
     let y = cur[0][1]
@@ -111,19 +83,6 @@ class Astar {
     }
     return true;
   }
-
-  execute() {
-
-    while (true) {
-      if (!this.step())
-        break;
-    }
-    this.orderVisited.pop()
-    this.orderVisited = this.orderVisited.reverse()
-    this.orderVisited.pop()
-    return this
-  }
-
 }
 
 export default Astar;

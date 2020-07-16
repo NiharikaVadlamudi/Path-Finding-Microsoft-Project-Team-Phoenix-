@@ -31,7 +31,7 @@ class Agent extends Component {
         { id: glob.aStarButtonId, label: "A*", options: [true, true, true], info: glob.aStarInfo },
         { id: glob.dijkstraButtonId, label: "Djikstra", options: [false, true, true], info: glob.dijkstraInfo },
         { id: glob.bestfsButtonId, label: "BestFS", options: [true, true, false], info: glob.bestfsInfo },
-        { id : glob.dfsButtonId,label:"DFS",options:[false,true,true], info: glob.dfsInfo},
+        { id: glob.dfsButtonId, label: "DFS", options: [false, true, true], info: glob.dfsInfo },
         // { id: glob.bidirectionalBFSButtonId, label: "Bidirectional BFS", options: [false, true], info: glob.bidirectionalBFSInfo },
         // { id: glob.bidirectionalDijkstraButtonId, label: "Bidirectional Dijkstra", options: [false, true], info: glob.bidirectionalDijkstraInfo },
         // {id: glob.bidirectionalDFSButtonId, label: "Bidirectional DFS", options: [false,true], info:glob.bidirectionalDFSInfo},
@@ -41,6 +41,7 @@ class Agent extends Component {
 
     }
     this.order = [];
+    this.answer = [];
   }
 
   handleStartStop = (button) => {
@@ -71,9 +72,11 @@ class Agent extends Component {
     startStopButton.label = "SEARCH";
     this.setState({ startStopButton });
     this.props.handlePhaseToggle(-1, true, "stop", false);
-    this.props.handleAlgo(this.order);
+    this.props.handleAlgo(this.order, this.answer);
     this.togglePauseDisable();
     this.order = [];
+    this.answer = [];
+    clearInterval(this.periodicStep)
   }
 
   handlePauseResume = (button) => {
@@ -136,7 +139,7 @@ class Agent extends Component {
         switch (this.state.algo) {
 
           case glob.bfsButtonId:
-            if(this.state.checkBidirectional)
+            if (this.state.checkBidirectional)
               algoItems = new BidirectionalBFS(this.props, this.state.neigh, this.state.heur);
             else
               algoItems = new BFS(this.props, this.state.neigh, this.state.heur);
@@ -147,25 +150,25 @@ class Agent extends Component {
             break;
 
           case glob.aStarButtonId:
-            if(this.state.checkBidirectional)
+            if (this.state.checkBidirectional)
               algoItems = new BidirectionalAstar(this.props, this.state.neigh, this.state.heur);
             else
               algoItems = new Astar(this.props, this.state.neigh, this.state.heur);
             break;
 
           case glob.dijkstraButtonId:
-            if(this.state.checkBidirectional)
+            if (this.state.checkBidirectional)
               algoItems = new BidirectionalDijkstra(this.props, this.state.neigh, this.state.heur);
             else
               algoItems = new Dijkstra(this.props, this.state.neigh, this.state.heur);
             break;
 
           case glob.DFSButtonId:
-          if(this.state.checkBidirectional)
-            algoItems = new BidirectionalDFS(this.props, this.state.neigh, this.state.heur);
-          else
-            algoItems = new DFS(this.props, this.state.neigh, this.state.heur);
-          break;
+            if (this.state.checkBidirectional)
+              algoItems = new BidirectionalDFS(this.props, this.state.neigh, this.state.heur);
+            else
+              algoItems = new DFS(this.props, this.state.neigh, this.state.heur);
+            break;
 
           default: break;
         }
@@ -174,22 +177,28 @@ class Agent extends Component {
 
         if (algoItems !== undefined && pause === false) {
           const orderVisited = algoItems.orderVisited
-          const par = algoItems.par
+          const path = algoItems.path
           algoItems = undefined
 
           this.periodicStep = setInterval(() => {
-            if (orderVisited.length !== 0 && pause === false) {
+            if (orderVisited.length !== 0 && !pause) {
               pause = this.state.pauseResumeButton.status
               let cur = orderVisited.pop();
               this.order.push(cur)
-              this.props.handleStep(cur);
+              this.props.handleStep(cur, 0);
             }
-            if (pause === true) {
+            else if (orderVisited.length === 0) {
+              if(path.length == 0)
+                this.algoEnd();
+              else if(!pause){
+                pause = this.state.pauseResumeButton.status
+                let cur = path.pop();
+                this.answer.push(cur)
+                this.props.handleStep(cur, 1);
+              }
+            }
+            if (pause) {
               pause = this.state.pauseResumeButton.status;
-
-            }
-            if (orderVisited.length === 0) {
-              this.algoEnd();
             }
 
           }, this.state.period);

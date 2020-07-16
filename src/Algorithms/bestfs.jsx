@@ -1,22 +1,14 @@
-import React, { Component } from 'react';
 import glob from '../components/global.jsx';
 import TinyQueue from 'tinyqueue';
-import { euclideanMetric, manhattanMetric, vancouverMetric } from './metrics.js';
+import Algorithm from './algorithm.jsx'
 
-// import Grid from '../components/Grid.jsx'
-class BestFS {
+class BestFS extends Algorithm {
 
   constructor(graph, neigh, heur, exec=true) {
-    this.status = graph.gridState.status
-    this.beg = graph.gridState.startLoc
-    this.end = graph.gridState.targetLoc
-    this.rows = this.status.length
-    this.cols = this.status[0].length
-    this.vis = []
-    this.par = []
-    this.metric = this.chooseHeuristic(heur)
-    console.log(heur, this.metric)
+    
+    super(graph, neigh, heur);
 
+    // setting up additional params and variables
     for (let i = 0; i < this.rows; i++) {
       this.vis[i] = []
       this.par[i] = []
@@ -25,50 +17,31 @@ class BestFS {
         this.par[i][j] = [i, j];
       }
     }
-    this.f = 0;
     this.que = new TinyQueue(
       [[this.beg, 0]],
       this.compare
     )
-    this.neigh = neigh
-    this.orderVisited = []
     this.vis[this.beg[0]][this.beg[1]] = 1;
 
+    // run on creation
     if(exec)
       return this.execute();
   }
 
-  chooseHeuristic(heur) {
-    switch (heur) {
-      case glob.ManhattanId: return manhattanMetric;
-      case glob.EuclideanId: return euclideanMetric;
-      case glob.VancouverId: return vancouverMetric;
-      default: break;
-    }
-  }
-
   getHeuristic = (a) => {
+    // get estimated distance
     return this.metric(a[0], this.end);
   }
 
   compare = (a, b) => {
+    // compare function for queue ordering
     a = this.getHeuristic(a)
     b = this.getHeuristic(b)
     return a < b ? -1 : a > b ? 1 : 0;
   }
 
-  isValid(x, y) {
-    return x < this.rows && x >= 0 && y < this.cols && y >= 0;
-  }
-
-  neighbours(x, y) {
-    if (this.neigh == 4)
-      return [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]];
-    else
-      return [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1], [x + 1, y + 1], [x + 1, y - 1], [x - 1, y + 1], [x - 1, y - 1]];
-  }
-
   step() {
+    // one step of search
     if(this.que.length === 0 || this.f === 1)
       return false;
     let cur = this.que.pop()
@@ -87,23 +60,11 @@ class BestFS {
       let b = neigh[i][1]
       if (this.isValid(a, b) && this.vis[a][b] === 0 && this.status[a][b] !== glob.wallId) {
         this.par[a][b] = [x, y]
-        this.que.push([[a, b], d + 1])
+        this.que.push([[a, b], d + this.getActualDist([x, y], [a, b])])
         this.vis[a][b] = 1;
       }
     }
     return true;
-  }
-
-  execute() {
-
-    while (true) {
-      if (!this.step())
-        break;
-    }
-    this.orderVisited.pop()
-    this.orderVisited = this.orderVisited.reverse()
-    this.orderVisited.pop()
-    return this
   }
 
 }

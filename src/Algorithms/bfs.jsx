@@ -1,18 +1,14 @@
-import React, { Component } from 'react';
 import glob from '../components/global.jsx'
+import TinyQueue from 'tinyqueue';
+import Algorithm from './algorithm.jsx'
 
-// import Grid from '../components/Grid.jsx'
-class BFS {
+class BFS extends Algorithm{
 
   constructor(graph, neigh, heur, exec=true) {
-    this.status = graph.gridState.status
-    this.beg = graph.gridState.startLoc
-    this.end = graph.gridState.targetLoc
-    this.rows = this.status.length
-    this.cols = this.status[0].length
-    this.vis = []
-    this.par = []
 
+    super(graph, neigh, heur);
+
+    // setting up additional params and variables
     for (let i = 0; i < this.rows; i++) {
       this.par[i] = []
       this.vis[i] = []
@@ -21,33 +17,30 @@ class BFS {
         this.par[i][j] = [i, j]
       }
     }
-    this.neigh = neigh
-    this.f = 0;
-    this.que = [[this.beg, 0]]
-    this.orderVisited = []
+    this.que = new TinyQueue(
+      [[this.beg, 0]],
+      this.compare
+    )
     this.vis[this.beg[0]][this.beg[1]] = 1;
 
-    // return this.f, this.vis, this.orderVisited;
+    // run on creation
     if(exec)
       return this.execute();
   }
 
-  isValid(x, y) {
-    return x < this.rows && x >= 0 && y < this.cols && y >= 0;
-  }
-
-  neighbours(x, y) {
-    if (this.neigh == 4)
-      return [[x - 1, y], [x, y - 1], [x, y + 1], [x + 1, y]];
-    else
-      return [[x - 1, y - 1], [x - 1, y], [x, y - 1], [x - 1, y + 1], [x + 1, y - 1], [x, y + 1], [x + 1, y], [x + 1, y + 1]];
+  compare = (a, b) => {
+    // compare function for queue ordering
+    a = a[1]
+    b = b[1]
+    return a < b ? -1 : a > b ? 1 : 0;
   }
 
   step() {
+    // one step of search
     if(this.que.length === 0 || this.f === 1){
       return false;
     }
-    let cur = this.que.shift()
+    let cur = this.que.pop()
     this.orderVisited.push(cur[0])
     let x = cur[0][0]
     let y = cur[0][1]
@@ -69,18 +62,6 @@ class BFS {
       }
     }
     return true
-  }
-
-  execute() {
-
-    while (true) {
-      if(!this.step())
-        break;
-    }
-    this.orderVisited.pop()
-    this.orderVisited = this.orderVisited.reverse()
-    this.orderVisited.pop()
-    return this
   }
 
 }

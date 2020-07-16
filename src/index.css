@@ -37,7 +37,14 @@ td.vis{
 }
 
 td.visWeight{
-  background-color: yellow;
+  background-color: purple;
+}
+
+td.path{
+  background-color: pink;
+}
+td.pathWeight{
+  background-color: hotpink;
 }
 
 div.legend {
