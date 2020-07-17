@@ -21,6 +21,7 @@ class BidirectionalAlgorithm {
         this.orderVisited = []
         this.path = []
         this.meetingPoint = undefined
+        this.timeTaken = 0; 
     }
 
     getPath() {
@@ -90,11 +91,18 @@ class BidirectionalAlgorithm {
 
     execute() {
 
-        // // loop to find target
+        // loop to find target
+        this.timeTaken = (new Date()).getTime();
         while (true) {
             if (!this.step())
                 break;
         }
+
+        // set time
+        if(this.f === 1)
+            this.timeTaken = (new Date()).getTime() - this.timeTaken;
+        else
+            this.timeTaken = Infinity
 
         // remove begin and target from list as they dont have to be marked
         this.orderVisited = this.orderVisited.reverse()

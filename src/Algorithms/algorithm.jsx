@@ -17,6 +17,7 @@ class Algorithm {
         this.f = 0;
         this.orderVisited = []
         this.path = []
+        this.timeTaken = 0
     }
 
     getActualDist(par, cur) {
@@ -67,14 +68,19 @@ class Algorithm {
     execute() {
 
         // loop to find target
+        this.timeTaken = (new Date()).getTime();
         while (true) {
             if (!this.step())
                 break;
         }
-
-        // remove begin and target from list as they dont have to be marked
-        if(this.f === 1)
+        // remove begin and target from list as they dont have to be marked and set time
+        if(this.f === 1){
             this.orderVisited.pop()
+            this.timeTaken = (new Date()).getTime() - this.timeTaken;
+        }
+        else{
+            this.timeTaken = Infinity
+        }
         this.orderVisited = this.orderVisited.reverse()
         this.orderVisited.pop()
         

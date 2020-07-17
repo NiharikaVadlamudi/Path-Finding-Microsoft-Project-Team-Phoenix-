@@ -32,12 +32,11 @@ class Agent extends Component {
         { id: glob.dijkstraButtonId, label: "Djikstra", options: [false, true, true], info: glob.dijkstraInfo },
         { id: glob.bestfsButtonId, label: "BestFS", options: [true, true, false], info: glob.bestfsInfo },
         { id: glob.dfsButtonId, label: "DFS", options: [false, true, true], info: glob.dfsInfo },
-        // { id: glob.bidirectionalBFSButtonId, label: "Bidirectional BFS", options: [false, true], info: glob.bidirectionalBFSInfo },
-        // { id: glob.bidirectionalDijkstraButtonId, label: "Bidirectional Dijkstra", options: [false, true], info: glob.bidirectionalDijkstraInfo },
-        // {id: glob.bidirectionalDFSButtonId, label: "Bidirectional DFS", options: [false,true], info:glob.bidirectionalDFSInfo},
-        // {id: glob.bidirectionalAstarButtonId, label: "Bidirectional A*", options: [true,true], info:glob.bidirectionalAstarInfo},
       ],
-      checkBidirectional: undefined
+      checkBidirectional: undefined,
+      timer: Infinity,
+      searchSize: 0,
+      pathCost: 0
 
     }
     this.order = [];
@@ -125,6 +124,16 @@ class Agent extends Component {
     this.setState({ algos, algo });
   }
 
+  handleAnalysisUpdate = (timer, searchSize, path) => {
+    let pathCost = 0;
+    for(let i = 0; i < path.length; i++){
+      pathCost += this.props.gridState.status[path[i][0]][path[i][1]] === glob.emptyId ? glob.normalVal : glob.weightVal;
+    }
+    this.setState({
+      timer, searchSize, pathCost
+    })
+  }
+
 
   componentDidUpdate(prevProps, prevState) {
     // status changed from not searching to searching
@@ -134,8 +143,9 @@ class Agent extends Component {
       var pause = this.state.pauseResumeButton.status;
       if (searching) {
         // init algo and set it to step periodically
-        let algoItems = undefined
-        // alert(this.state.checkBidirectional)
+        let algoItems = undefined;
+        let timerStart = (new Date()).getTime();
+
         switch (this.state.algo) {
 
           case glob.bfsButtonId:
@@ -176,9 +186,13 @@ class Agent extends Component {
         pause = this.state.pauseResumeButton.status;
 
         if (algoItems !== undefined && pause === false) {
+
           const orderVisited = algoItems.orderVisited
           const path = algoItems.path
+          const timer = algoItems.timeTaken
           algoItems = undefined
+
+          this.handleAnalysisUpdate(timer, orderVisited.length, path)
 
           this.periodicStep = setInterval(() => {
             if (orderVisited.length !== 0 && !pause) {
@@ -206,7 +220,6 @@ class Agent extends Component {
 
       }
       else {
-        // this.state.algo = undefined
         clearInterval(this.periodicStep)
       }
     }
@@ -220,13 +233,11 @@ class Agent extends Component {
 
 
   render() {
-    // console.log("agent rerender", this.algo, this.heur, this.neigh)
     return (
       <span>
         <Button el={this.state.startStopButton} onSelectOption={this.handleStartStop} />
         <Button el={this.state.pauseResumeButton} onSelectOption={this.handlePauseResume} />
         <Button el={this.state.clearWallsButton} onSelectOption={this.props.handleclearWalls} />
-
 
         {this.state.algos.map(el =>
           <AccordionElement
@@ -239,6 +250,19 @@ class Agent extends Component {
             canSelectOptions={this.state.startStopButton.status}
           />
         )}
+
+      <div className="card" style={{ width: '12rem' }}>
+        <div className="card-header">
+          Analysis
+        </div>
+        <ul className="list-group list-group-flush">
+          <li className="list-group-item">Time: {this.state.timer} ms</li>
+          <li className="list-group-item">Cost: {this.state.pathCost}</li>
+          <li className="list-group-item">Search Space: {this.state.searchSize}</li>
+          {/* <li className="list-group-item">Normal node cost: </li>
+          <li className="list-group-item">Weighted node cost: </li> */}
+        </ul>
+      </div>
 
       </span>
     );
