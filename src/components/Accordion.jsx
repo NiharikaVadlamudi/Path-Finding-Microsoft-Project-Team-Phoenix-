@@ -123,7 +123,6 @@ class AccordionElement extends Component {
     if(this.props.options[2]!==undefined && this.props.options[2]){
       details = <div>
                 {details}
-                <hr/>
                 <div style={{ color:  '#7c7a79', fontSize: '16px',}} >
                 Bidirectional Search:
                 </div>
@@ -135,6 +134,7 @@ class AccordionElement extends Component {
                 </Grid>
                 <Grid item>On</Grid>
                 </Grid>
+                <hr/>
                 </div>
     }
     return (

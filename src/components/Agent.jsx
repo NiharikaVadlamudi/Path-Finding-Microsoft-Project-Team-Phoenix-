@@ -182,40 +182,47 @@ class Agent extends Component {
 
           default: break;
         }
+        if(algoItems.f)
+        {
+          pause = this.state.pauseResumeButton.status;
 
-        pause = this.state.pauseResumeButton.status;
+          if (algoItems !== undefined && pause === false) {
 
-        if (algoItems !== undefined && pause === false) {
+            const orderVisited = algoItems.orderVisited
+            const path = algoItems.path
+            const timer = algoItems.timeTaken
+            algoItems = undefined
 
-          const orderVisited = algoItems.orderVisited
-          const path = algoItems.path
-          const timer = algoItems.timeTaken
-          algoItems = undefined
+            this.handleAnalysisUpdate(timer, orderVisited.length, path)
 
-          this.handleAnalysisUpdate(timer, orderVisited.length, path)
-
-          this.periodicStep = setInterval(() => {
-            if (orderVisited.length !== 0 && !pause) {
-              pause = this.state.pauseResumeButton.status
-              let cur = orderVisited.pop();
-              this.order.push(cur)
-              this.props.handleStep(cur, 0);
-            }
-            else if (orderVisited.length === 0) {
-              if(path.length == 0)
-                this.algoEnd();
-              else if(!pause){
+            this.periodicStep = setInterval(() => {
+              if (orderVisited.length !== 0 && !pause) {
                 pause = this.state.pauseResumeButton.status
-                let cur = path.pop();
-                this.answer.push(cur)
-                this.props.handleStep(cur, 1);
+                let cur = orderVisited.pop();
+                this.order.push(cur)
+                this.props.handleStep(cur, 0);
               }
-            }
-            if (pause) {
-              pause = this.state.pauseResumeButton.status;
-            }
+              else if (orderVisited.length === 0) {
+                if(path.length == 0)
+                this.algoEnd();
+                else if(!pause){
+                  pause = this.state.pauseResumeButton.status
+                  let cur = path.pop();
+                  this.answer.push(cur)
+                  this.props.handleStep(cur, 1);
+                }
+              }
+              if (pause) {
+                pause = this.state.pauseResumeButton.status;
+              }
 
-          }, this.state.period);
+            }, this.state.period);
+          }
+
+        }
+        else {
+          this.props.setModalValues("Target is unreachable")
+            this.algoEnd();
         }
 
       }
