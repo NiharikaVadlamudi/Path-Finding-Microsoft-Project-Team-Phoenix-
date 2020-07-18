@@ -4,6 +4,8 @@ import Alert from 'react-bootstrap/Alert';
 import Card from 'react-bootstrap/Card';
 import Button from "./Button.jsx"
 import AccordionElement from "./Accordion.jsx"
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Tooltip from 'react-bootstrap/Tooltip'
 import glob from "./global.jsx"
 import BFS from "../Algorithms/bfs.jsx"
 import DFS from "../Algorithms/dfs.jsx"
@@ -55,7 +57,7 @@ class Agent extends Component {
     if (startStopButton.status === false) {
       this.props.clearLastAlgo();
       if (this.props.gridState.targetLoc === undefined || this.props.gridState.startLoc === undefined || this.state.algo === undefined) {
-        this.props.setModalValues("set start/target/algo")
+        // this.props.setModalValues("set algo")
         this.props.handleChecks();
 
       }
@@ -87,7 +89,7 @@ class Agent extends Component {
 
   handlePauseResume = (button) => {
     if (this.state.startStopButton.status === false) {
-      this.props.setModalValues("Button disabled when algo is not running")
+      // this.props.setModalValues("Button disabled when algo is not running")
     }
     else {
       var pauseResumeButton = JSON.parse(JSON.stringify(this.state.pauseResumeButton));
@@ -260,9 +262,40 @@ class Agent extends Component {
     clearInterval(this.periodicStep);
   }
 
+  buttonOverlays = (message, button) =>
+  {
+    let buttonOverlay = <OverlayTrigger
+    placement="left"
+    delay={{ show: 250, hide: 400 }}
+    overlay={
+      <Tooltip id="button-tooltip" {...this.props} >
+        {message}
+      </Tooltip>
+    }
+    ><div>
+    {button}
+    </div>
+    </OverlayTrigger>
+    return buttonOverlay
+  }
 
 
   render() {
+    let pauseOverlay = <Button el={this.state.pauseResumeButton} onSelectOption={this.handlePauseResume} />
+    if(this.state.startStopButton.status === false)
+    {
+      pauseOverlay = this.buttonOverlays("Cannot clear board while algorithm is in Search mode", pauseOverlay )
+    }
+    let searchOverlay = <Button el={this.state.startStopButton} onSelectOption={this.handleStartStop} />
+    if(this.props.gridState.targetLoc === undefined || this.props.gridState.startLoc === undefined || this.state.algo === undefined)
+    {
+      searchOverlay = this.buttonOverlays("Algorithm not selected", searchOverlay )
+    }
+    let clearBoardOverlay = <Button el={this.state.clearWallsButton} onSelectOption={this.props.handleclearWalls} />
+    if(this.state.startStopButton.status)
+    {
+      clearBoardOverlay = this.buttonOverlays("Cannot clear board while algorithm is in Search mode", clearBoardOverlay )
+    }
 
     return (
       <span>
@@ -299,11 +332,15 @@ class Agent extends Component {
       </Modal>
 
 
+      {searchOverlay}
+      {pauseOverlay}
+      {clearBoardOverlay}
 
 
-      <Button el={this.state.startStopButton} onSelectOption={this.handleStartStop} />
-      <Button el={this.state.pauseResumeButton} onSelectOption={this.handlePauseResume} />
-      <Button el={this.state.clearWallsButton} onSelectOption={this.props.handleclearWalls} />
+
+
+
+
 
       </span>
     );

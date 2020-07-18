@@ -10,6 +10,7 @@ import Tooltip from 'react-bootstrap/Tooltip'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Grid from '@material-ui/core/Grid';
+import Overlay from 'react-bootstrap/Overlay'
 
 class AccordionElement extends Component {
 

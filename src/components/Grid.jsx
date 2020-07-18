@@ -251,7 +251,7 @@ class Grid extends Component {
 
     }
     else {
-      this.setModalValues("Stop algo before clearing walls")
+      // this.setModalValues("Stop algo before clearing walls")
     }
   }
 
