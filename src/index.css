@@ -12,6 +12,12 @@ code {
     monospace;
 }
 
+.cell {
+  height:20px;
+  width:20px;
+  border: 1px solid black;
+}
+
 td.wall{
   background-color: #0000ff;
 }

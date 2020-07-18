@@ -91,8 +91,8 @@ class AccordionElement extends Component {
 
     let details = undefined
     if (this.props.options[0]) {
-      details = <div style={{ width: '10rem' }}>
-                            <div style={{ color:  '#7c7a79', fontSize: '16px',}} >
+      details = <div style={{ width: '8rem' , fontSize: '13px'}}>
+                            <div style={{ color:  '#7c7a79', fontSize: '13px',}} >
                             Distance Metric :
                             </div>
                             <Select
@@ -106,8 +106,8 @@ class AccordionElement extends Component {
                           </div>
     }
     if(this.props.options[1]){
-      details = <div  style={{ width: '10rem' }}>
-                            <div style={{ color:  '#7c7a79', fontSize: '16px',}} >
+      details = <div  style={{ width: '8rem' , fontSize: '13px'}}>
+                            <div style={{ color:  '#7c7a79', fontSize: '13px',}} >
                             Neighbour Metric :
                             </div>
                             <Select
@@ -123,22 +123,22 @@ class AccordionElement extends Component {
     if(this.props.options[2]!==undefined && this.props.options[2]){
       details = <div>
                 {details}
-                <div style={{ color:  '#7c7a79', fontSize: '16px',}} >
+                <div style={{ color:  '#7c7a79', fontSize: '13px',}} >
                 Bidirectional Search:
                 </div>
                 <Grid component="label" container alignItems="center" spacing={1}>
-                <Grid item>Off</Grid>
+                <Grid item style={{ color:  '#7c7a79', fontSize: '13px'}}>Off</Grid>
                 <Grid item>
 
                 <Switch color="primary" disabled={this.props.canSelectOptions} checked={this.state.checkBidirectional} onChange={this.handleBidirectionalOption} name="checkedA" />
                 </Grid>
-                <Grid item>On</Grid>
+                <Grid item style={{ color:  '#7c7a79', fontSize: '13px',}}>On</Grid>
                 </Grid>
                 <hr/>
                 </div>
     }
     return (
-      <Card style={{ width: '12rem'}}>
+      <Card style={{ width: '10rem'}}>
         <Accordion
           expanded={this.isActive()}
           onChange={this.props.onSelectOption(this.state.id, this.state.selectedHeuristic, this.state.selectedNeighbourhood, this.state.checkBidirectional)}

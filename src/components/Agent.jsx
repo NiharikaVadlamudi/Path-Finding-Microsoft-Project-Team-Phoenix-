@@ -1,5 +1,6 @@
 import React, { Component, useEffect } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
+import Alert from 'react-bootstrap/Alert';
 import Card from 'react-bootstrap/Card';
 import Button from "./Button.jsx"
 import AccordionElement from "./Accordion.jsx"
@@ -13,7 +14,12 @@ import BidirectionalBFS from "../Algorithms/bidirectionalBFS.jsx"
 import BidirectionalDijkstra from '../Algorithms/bidirectionalDijkstra.jsx'
 import BidirectionalDFS from '../Algorithms/bidirectionalDFS.jsx'
 import BidirectionalAstar from '../Algorithms/bidirectionalAstar.jsx'
-
+import Modal from 'react-bootstrap/Modal';
+import ModalDialog from 'react-bootstrap/ModalDialog';
+import ModalHeader from 'react-bootstrap/ModalHeader';
+import ModalTitle from 'react-bootstrap/ModalTitle';
+import ModalBody from 'react-bootstrap/ModalBody';
+import ModalFooter from 'react-bootstrap/ModalFooter';
 class Agent extends Component {
 
   constructor(props) {
@@ -36,7 +42,8 @@ class Agent extends Component {
       checkBidirectional: undefined,
       timer: Infinity,
       searchSize: 0,
-      pathCost: 0
+      pathCost: 0,
+      showAnalysis: false,
 
     }
     this.order = [];
@@ -134,6 +141,11 @@ class Agent extends Component {
     })
   }
 
+  handleShowAnalysis = () =>
+  {
+    this.setState({showAnalysis:false});
+  }
+
 
   componentDidUpdate(prevProps, prevState) {
     // status changed from not searching to searching
@@ -204,7 +216,18 @@ class Agent extends Component {
               }
               else if (orderVisited.length === 0) {
                 if(path.length == 0)
-                this.algoEnd();
+                {
+                  this.setState({ showAnalysis:true})
+                  let analysis = <ul className="list-group list-group-flush">
+                  <li className="list-group-item">Time: {this.state.timer} ms</li>
+                  <li className="list-group-item">Cost: {this.state.pathCost}</li>
+                  <li className="list-group-item">Search Space: {this.state.searchSize}</li>
+                  {/* <li className="list-group-item">Normal node cost: </li>
+                  <li className="list-group-item">Weighted node cost: </li> */}
+                  </ul>;
+                  this.props.setAnalysis(analysis);
+                  this.algoEnd();
+                }
                 else if(!pause){
                   pause = this.state.pauseResumeButton.status
                   let cur = path.pop();
@@ -240,11 +263,9 @@ class Agent extends Component {
 
 
   render() {
+
     return (
       <span>
-        <Button el={this.state.startStopButton} onSelectOption={this.handleStartStop} />
-        <Button el={this.state.pauseResumeButton} onSelectOption={this.handlePauseResume} />
-        <Button el={this.state.clearWallsButton} onSelectOption={this.props.handleclearWalls} />
 
         {this.state.algos.map(el =>
           <AccordionElement
@@ -258,18 +279,31 @@ class Agent extends Component {
           />
         )}
 
-      <div className="card" style={{ width: '12rem' }}>
-        <div className="card-header">
-          Analysis
-        </div>
+
+      <Modal aria-labelledby="contained-modal-title-vcenter" style={{opacity: 1}} centered show={this.state.showAnalysis} onHide={this.handleShowAnalysis}>
+        <Modal.Header closeButton>
+          <Modal.Title>Algorithm Analysis</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+
         <ul className="list-group list-group-flush">
-          <li className="list-group-item">Time: {this.state.timer} ms</li>
-          <li className="list-group-item">Cost: {this.state.pathCost}</li>
-          <li className="list-group-item">Search Space: {this.state.searchSize}</li>
-          {/* <li className="list-group-item">Normal node cost: </li>
-          <li className="list-group-item">Weighted node cost: </li> */}
+        <li className="list-group-item">Time: {this.state.timer} ms</li>
+        <li className="list-group-item">Cost: {this.state.pathCost}</li>
+        <li className="list-group-item">Search Space: {this.state.searchSize}</li>
+        {/* <li className="list-group-item">Normal node cost: </li>
+        <li className="list-group-item">Weighted node cost: </li> */}
         </ul>
-      </div>
+
+        </Modal.Body>
+
+      </Modal>
+
+
+
+
+      <Button el={this.state.startStopButton} onSelectOption={this.handleStartStop} />
+      <Button el={this.state.pauseResumeButton} onSelectOption={this.handlePauseResume} />
+      <Button el={this.state.clearWallsButton} onSelectOption={this.props.handleclearWalls} />
 
       </span>
     );
