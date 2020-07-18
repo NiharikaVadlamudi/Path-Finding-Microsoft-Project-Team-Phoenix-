@@ -8,13 +8,13 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tooltip from 'react-bootstrap/Tooltip'
 import glob from "./global.jsx"
 import BFS from "../Algorithms/bfs.jsx"
-import DFS from "../Algorithms/dfs.jsx"
+import DFS from "../Algorithms/dfs"
 import BestFS from "../Algorithms/bestfs.jsx"
 import Astar from "../Algorithms/astar.jsx"
 import Dijkstra from "../Algorithms/dijkstra.jsx"
 import BidirectionalBFS from "../Algorithms/bidirectionalBFS.jsx"
 import BidirectionalDijkstra from '../Algorithms/bidirectionalDijkstra.jsx'
-import BidirectionalDFS from '../Algorithms/bidirectionalDFS.jsx'
+import BidirectionalDFS from '../Algorithms/bidirectionalDFS'
 import BidirectionalAstar from '../Algorithms/bidirectionalAstar.jsx'
 import Modal from 'react-bootstrap/Modal';
 import ModalDialog from 'react-bootstrap/ModalDialog';
@@ -187,7 +187,7 @@ class Agent extends Component {
               algoItems = new Dijkstra(this.props, this.state.neigh, this.state.heur);
             break;
 
-          case glob.DFSButtonId:
+          case glob.dfsButtonId:
             if (this.state.checkBidirectional)
               algoItems = new BidirectionalDFS(this.props, this.state.neigh, this.state.heur);
             else

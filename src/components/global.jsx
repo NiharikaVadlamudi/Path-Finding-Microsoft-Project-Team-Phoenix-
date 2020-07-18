@@ -21,9 +21,8 @@ export default {
     dfsButtonId:5,
     bidirectionalBFSButtonId : 6,
     bidirectionalDijkstraButtonId: 7,
-    DFSButtonId: 8,
-    bidirectionalDFSButtonId: 9,
-    bidirectionalAstarButtonId: 10,
+    bidirectionalDFSButtonId: 8,
+    bidirectionalAstarButtonId: 9,
 
     searchPhaseId : 1,
     designPhaseId : -1,
@@ -42,16 +41,15 @@ export default {
 
     bfsInfo: "A traversing algorithm where you start from the start node and traverse the graph layerwise ie. from source node to directly connected nodes and further to the next level neighbour nodes.",
     bestfsInfo: "Unlike BFS and DFS, it uses an evaluation function to decide which adjacent node is most promising and then explore. Best FS falls in the criteria of heuristic search or informed search.",
-    aStarInfo: "Likhdo iska koi pls",
-    dijkstraInfo: "Algorithm for finding the shortest path from source vertex to all vertices in a given graph.",
+    aStarInfo: "An informed search algorithms to find the shortest path between nodes in graph, and uses information about path and heuristics to find the solution",
+    dijkstraInfo: "An algorithm for finding the shortest path from source vertex to all vertices in a given graph.",
     bidirectionalDFSInfo: "Unlike normal DFS where the search begins in one direction, here the search starts in both directions simultaneously from source to goal vertex. The recursive algorithm starts at the root node and explores as far as possible along each branch before backtracking.",
     bidirectionalBFSInfo: "Unlike normal BFS where the search begins in one direction, here the search starts in both directions simultaneously from source to goal vertex. The traversal goes on layerwise ie. from source node to directly connected nodes and further to the next level neighbour nodes.",
-    bidirectionalAstarInfo: "Unlike normal BFS where the search begins in one direction, here the search starts in both directions simultaneously from source to goal vertex. The traversal goes on layerwise ie. from source node to directly connected nodes and further to the next level neighbour nodes.",
-    bidirectionalDijkstraInfo: "Likhdo iska koi pls",
+    bidirectionalAstarInfo: "The source and goal node  use A* method inorder to reach a common intersection point,hence reducing the time complexity.",
+    bidirectionalDijkstraInfo: "The source and goal adapt Djikstra's process to reach a common intersection point,hence reducing the time complexity.",
     dfsInfo: "A traversing recursive algorithm that starts at the root node and explores as far as possible along each branch before backtracking.",
 
     manhattanInfo: "M",
     euclideanInfo: "E",
     vancouverInfo: "V",
-
 }
