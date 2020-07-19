@@ -31,7 +31,7 @@ class Agent extends Component {
       startStopButton: { id: glob.startSearchButtonId, label: "SEARCH", status: false },
       pauseResumeButton: { id: glob.pauseResumeButtonId, label: "PAUSE", status: false, disable: true },
       clearWallsButton: { id: glob.clearWallsButtonId, label: "CLEAR WALLS / PATH", status: false },
-      period: 10,
+      period: 5,
       neigh: undefined,
       heur: undefined,
       algos: [

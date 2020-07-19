@@ -119,7 +119,6 @@ class Grid extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     // end drawing
-    console.log("checking")
     if (this.anyDrawUpdates && prevProps.isMouseDown && !this.props.isMouseDown) {
       this.pushDrawUpdate();
     }

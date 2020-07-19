@@ -1,5 +1,5 @@
 {
-  "name": "react-flask-app",
+  "name": "pathfinding-phoenix",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -9,7 +9,6 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "avl-trees-js": "^1.2.3",
     "bootstrap": "^4.5.0",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
@@ -20,8 +19,7 @@
     "tinyqueue": "^2.0.3"
   },
   "scripts": {
-    "start-front": "react-scripts start",
-    "start-back": "cd backend && venv/bin/flask run --no-debugger",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
