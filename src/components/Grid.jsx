@@ -12,10 +12,15 @@ import ModalTitle from 'react-bootstrap/ModalTitle';
 import ModalBody from 'react-bootstrap/ModalBody';
 import ModalFooter from 'react-bootstrap/ModalFooter';
 
+function assert(condition, message) {
+  if (!condition) {
+      throw message || "Assertion failed";
+  }
+}
 class Grid extends Component {
   state = {
-    rows: Math.ceil(window.innerHeight/30),
-    cols: Math.ceil(window.innerWidth/30),
+    rows: Math.ceil(window.innerHeight / 30),
+    cols: Math.ceil(window.innerWidth / 30),
     status: [],
     startLoc: undefined,
     targetLoc: undefined,
@@ -30,8 +35,7 @@ class Grid extends Component {
     ],
     showModal: false,
     ModalMessage: "",
-    Analysis: undefined
-
+    Analysis: undefined,
   }
 
   constructor() {
@@ -43,28 +47,47 @@ class Grid extends Component {
         status[r][c] = 0;
       }
     }
-    let r = Math.ceil(this.state.rows/6)
-    let c = Math.ceil(this.state.cols/6)
+    let r = Math.ceil(this.state.rows / 6)
+    let c = Math.ceil(this.state.cols / 6)
 
     this.state.startLoc = [r, c]
-    this.state.targetLoc = [r*4, c*4]
+    this.state.targetLoc = [r * 4, c * 4]
     status[r][c] = glob.startId
-    status[r*4][c*4] = glob.targetId
+    status[r * 4][c * 4] = glob.targetId
     this.state.status = status;
+    this.tempStartLoc = this.state.startLoc
+    this.tempTargetLoc = this.state.targetLoc
+    this.anyDrawUpdates = false;
   }
 
-  getTdClassName = (status) => {
-    switch (status) {
-      case glob.emptyId: return "cell empty";
-      case glob.wallId: return "cell wall";
-      case glob.startId: return "cell start";
-      case glob.targetId: return "cell target";
-      case glob.visId: return "cell vis";
-      case glob.weightId: return "cell weight";
-      case glob.visAndWeightId: return "cell visWeight";
-      case glob.pathId: return "cell path";
-      case glob.pathAndWeightId: return "cell pathWeight";
-      default: break;
+  getTdClassName = (status, inverse=false) => {
+    if(!inverse){
+      switch (status) {
+        case glob.emptyId: return "cell empty";
+        case glob.wallId: return "cell wall";
+        case glob.startId: return "cell start";
+        case glob.targetId: return "cell target";
+        case glob.visId: return "cell vis";
+        case glob.weightId: return "cell weight";
+        case glob.visAndWeightId: return "cell visWeight";
+        case glob.pathId: return "cell path";
+        case glob.pathAndWeightId: return "cell pathWeight";
+        default: break;
+      }
+    }
+    else{
+      switch (status) {
+        case "cell empty" : return glob.emptyId ;
+        case "cell wall" : return glob.wallId ;
+        case "cell start" : return glob.startId ;
+        case "cell target" : return glob.targetId ;
+        case "cell vis" : return glob.visId ;
+        case "cell weight" : return glob.weightId ;
+        case "cell visWeight" : return glob.visAndWeightId ;
+        case "cell path" : return glob.pathId ;
+        case "cell pathWeight" : return glob.pathAndWeightId ;
+        default: break;
+      }
     }
   }
 
@@ -83,77 +106,103 @@ class Grid extends Component {
           />
         )
       }
-      tr.push(<tr  key={r}>{td}</tr>);
+      tr.push(<tr key={r}>{td}</tr>);
     }
     return (
 
-          <table className="shadow-lg p-2 mb-5 rounded">
-            <tbody>{tr}</tbody>
-          </table>
+      <table className="shadow-lg p-2 mb-5 rounded">
+        <tbody>{tr}</tbody>
+      </table>
 
     );
   }
 
-  handleCellClick = (r, c) => {
+  componentDidUpdate(prevProps, prevState) {
+    // end drawing
+    console.log("checking")
+    if (this.anyDrawUpdates && prevProps.isMouseDown && !this.props.isMouseDown) {
+      this.pushDrawUpdate();
+    }
+    return true;
+  }
 
+  pushDrawUpdate(){
+
+    // a few sanity checks
+    assert(this.anyDrawUpdates, "Trying to push 0 updates")
+
+    const clone = JSON.parse(JSON.stringify(this.state.status));
+    let startLoc = undefined, targetLoc = undefined;
+    for (let r = 0; r < this.state.rows; r++) {
+      for (let c = 0; c < this.state.cols; c++) {
+          clone[r][c] = this.getTdClassName(document.getElementById(`${r}, ${c}`).className, true)
+          if(clone[r][c] == glob.startId){
+            startLoc = [r, c];
+          }
+          else if(clone[r][c] == glob.targetId){
+            targetLoc = [r, c];
+          }
+      }
+    }
+    this.anyDrawUpdates = false;
+
+    // a few sanity tests
+    assert(startLoc[0] === this.tempStartLoc[0] && startLoc[1] === this.tempStartLoc[1], "Start out of sync " + startLoc + " " + this.tempStartLoc)
+    assert(targetLoc[0] === this.tempTargetLoc[0] && targetLoc[1] === this.tempTargetLoc[1], "Target out of sync" + targetLoc + " " + this.tempTargetLoc)
+    assert(!this.anyDrawUpdates, "Updates not pushed")
+
+    this.setState({ 
+      status: clone,
+      startLoc: startLoc,
+      targetLoc: targetLoc
+    }); 
+  }
+
+  handleCellClick = (r, c) => {
     if (!this.state.drawAllowed) return;
     if (!this.state.isEmptyVis && this.state.drawMode != -1)
       this.clearLastAlgo();
-    const updateStatus = (prevState) => {
-      const clone = JSON.parse(JSON.stringify(prevState.status));
-      let startLoc = prevState.startLoc
-      let targetLoc = prevState.targetLoc
-      switch (this.state.drawMode) {
-        case glob.wallButtonId:
-          if (prevState.status[r][c] === glob.emptyId || prevState.status[r][c] === glob.wallId)
-            clone[r][c] = prevState.status[r][c] ^ 1;
-          break;
-        case glob.startButtonId:
-          if (clone[r][c] === glob.emptyId) {
-            if (startLoc)
-              clone[startLoc[0]][startLoc[1]] = glob.emptyId;
-            clone[r][c] = glob.startId;
-            startLoc = [r, c];
-          }
-          else if (clone[r][c] === glob.startId && startLoc) {
-            // clone[startLoc[0]][startLoc[1]] = glob.emptyId;
-            // startLoc = undefined;
-          }
-          break;
-        case glob.targetButtonId:
-          if (clone[r][c] === glob.emptyId) {
-            if (targetLoc)
-              clone[targetLoc[0]][targetLoc[1]] = glob.emptyId;
-            clone[r][c] = glob.targetId;
-            targetLoc = [r, c]
-          }
-          else if (clone[r][c] === glob.targetId && targetLoc) {
-            // clone[targetLoc[0]][targetLoc[1]] = glob.emptyId;
-            // targetLoc = undefined;
-          }
-          break;
-          case glob.weightButtonId:
-          if(prevState.status[r][c] === glob.emptyId){
-            clone[r][c] = glob.weightId;
-          }
-          else if(prevState.status[r][c] === glob.weightId){
-            clone[r][c] = glob.emptyId;
-          }
-          break;
+    
+    const curCell = document.getElementById(`${r}, ${c}`);
+    switch (this.state.drawMode) {
+      case glob.wallButtonId:
+        if(curCell.className === this.getTdClassName(glob.emptyId)){
+          curCell.className = this.getTdClassName(glob.wallId);
+        }
+        else if(curCell.className === this.getTdClassName(glob.wallId)){
+          curCell.className = this.getTdClassName(glob.emptyId);
+        }
+        break;
+      case glob.startButtonId:
+        if (curCell.className === this.getTdClassName(glob.emptyId)) {
+          if (this.tempStartLoc)
+            document.getElementById(`${this.tempStartLoc[0]}, ${this.tempStartLoc[1]}`).className = this.getTdClassName(glob.emptyId);
+          curCell.className = this.getTdClassName(glob.startId);
+          this.tempStartLoc = [r, c];
+        }
+        break;
+      case glob.targetButtonId:
+        if (curCell.className === this.getTdClassName(glob.emptyId)) {
+          if (this.tempTargetLoc)
+            document.getElementById(`${this.tempTargetLoc[0]}, ${this.tempTargetLoc[1]}`).className = this.getTdClassName(glob.emptyId);
+          curCell.className = this.getTdClassName(glob.targetId);
+          this.tempTargetLoc = [r, c];
+        }
+        break;
+      case glob.weightButtonId:
+        if(curCell.className === this.getTdClassName(glob.emptyId)){
+          curCell.className = this.getTdClassName(glob.weightId);
+        }
+        else if(curCell.className === this.getTdClassName(glob.weightId)){
+          curCell.className = this.getTdClassName(glob.emptyId);
+        }
+        break;
 
-        default: break;
-      }
-      return [clone, startLoc, targetLoc];
+      default: break;
     }
 
-    this.setState(prevState => {
-      const newState = updateStatus(prevState)
-      return {
-        status: newState[0],
-        startLoc: newState[1],
-        targetLoc: newState[2]
-      }
-    });
+    this.anyDrawUpdates = true;
+
   }
 
   setModes = (drawModeVal, drawAllowedVal) => {
@@ -162,6 +211,7 @@ class Grid extends Component {
     drawMode = drawModeVal;
     drawAllowed = drawAllowedVal;
     this.setState({ drawMode, drawAllowed });
+    this.props.handleDisableReadMouse(drawAllowed);
   }
 
   handleSelectDrawMode = (element) => {
@@ -197,22 +247,22 @@ class Grid extends Component {
 
   handleAlgo = (order, path) => {
     const clone = JSON.parse(JSON.stringify(this.state.status));
-    for(let i = 0; i < order.length; i++){
+    for (let i = 0; i < order.length; i++) {
       clone[order[i][0]][order[i][1]] = clone[order[i][0]][order[i][1]] === glob.weightId ? glob.visAndWeightId : glob.visId;
     }
-    for(let i = 0; i < path.length; i++){
+    for (let i = 0; i < path.length; i++) {
       clone[path[i][0]][path[i][1]] = clone[path[i][0]][path[i][1]] === glob.visAndWeightId ? glob.pathAndWeightId : glob.pathId;
     }
     this.setState({ status: clone })
   }
 
   handleStep = (vis, path) => {
-    if(!path){
+    if (!path) {
       document.getElementById(`${vis[0]}, ${vis[1]}`).className = this.getTdClassName(
         this.state.status[vis[0]][vis[1]] === glob.weightId ? glob.visAndWeightId : glob.visId
       )
     }
-    else{
+    else {
       document.getElementById(`${vis[0]}, ${vis[1]}`).className = this.getTdClassName(
         this.state.status[vis[0]][vis[1]] === glob.weightId ? glob.pathAndWeightId : glob.pathId
       )
@@ -225,7 +275,7 @@ class Grid extends Component {
       for (let j = 0; j < this.state.cols; j++) {
         if (clone[i][j] === glob.visId || clone[i][j] === glob.pathId)
           clone[i][j] = glob.emptyId;
-        else if(clone[i][j] === glob.visAndWeightId || clone[i][j] === glob.pathAndWeightId)
+        else if (clone[i][j] === glob.visAndWeightId || clone[i][j] === glob.pathAndWeightId)
           clone[i][j] = glob.weightId;
       }
     }
@@ -236,8 +286,7 @@ class Grid extends Component {
 
 
   handleClearWalls = () => {
-    if(this.state.drawAllowed === true)
-    {
+    if (this.state.drawAllowed === true) {
       const clone = JSON.parse(JSON.stringify(this.state.status));
       for (let i = 0; i < this.state.rows; i++) {
         for (let j = 0; j < this.state.cols; j++) {
@@ -255,29 +304,28 @@ class Grid extends Component {
     }
   }
 
-  handleClose = () =>
-  {
-    this.setState({showModal:false});
+  handleClose = () => {
+    this.setState({ showModal: false });
   }
 
   setAnalysis = (analysis) => {
-    this.setState({Analysis : analysis});
+    this.setState({ Analysis: analysis });
   }
 
-  setModalValues = (message) =>
-  {
-    this.setState({ showModal:true, ModalMessage:message })
+  setModalValues = (message) => {
+    this.setState({ showModal: true, ModalMessage: message })
   }
   render() {
-    // console.log(this.state.status[2][6])
+    // console.log("grid", this.state.drawAllowed)
+
     let analysis = <p> </p>
 
-    if(this.state.Analysis!=undefined)
-    {
+    if (this.state.Analysis != undefined) {
       analysis = this.state.Analysis
     }
 
     return (
+
       <React.Fragment>
         <span>
           {this.state.drawButtons.map(
@@ -286,9 +334,9 @@ class Grid extends Component {
         </span>
 
         <Container fluid style={{ paddingLeft: 0, paddingRight: 0 }}>
-          <Row  noGutters className="justify-content-md-left">
+          <Row noGutters className="justify-content-md-left">
             <Col xs={{ span: 4, offset: 0 }} md={{ span: 2, offset: 0 }}>
-              <div className="d-flex flex-column flex-wrap m-2" style={{width:'100%'}}>
+              <div className="d-flex flex-column flex-wrap m-2" style={{ width: '100%' }}>
                 <div className="d-flex p-2">
                   <div className="legend wall"></div>
                   <div> Wall</div>
