@@ -13,7 +13,7 @@ class NavBar extends Component {
             <nav className="navbar navbar-expand-sm bg-dark navbar-dark">
                 <ul className="navbar-nav">
                     <li className="nav-item active">
-                        <a className="nav-link" href="#"><h1 align='center'>PathFinder</h1></a>
+                        <h2 style={{color: 'white'}} align='center'>PathFinder</h2>
                     </li>
                     {/* <li className="nav-item">
                         <a className="nav-link" href="#">Link</a>

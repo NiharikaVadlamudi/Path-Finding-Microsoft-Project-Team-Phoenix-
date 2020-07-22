@@ -136,7 +136,7 @@ class Agent extends Component {
   handleAnalysisUpdate = (timer, searchSize, path) => {
     let pathCost = 0;
     for(let i = 0; i < path.length; i++){
-      pathCost += this.props.gridState.status[path[i][0]][path[i][1]] === glob.emptyId ? glob.normalVal : glob.weightVal;
+      pathCost += this.props.gridState.status[path[i][0]][path[i][1]] === glob.emptyId ? glob.normalVal : this.props.gridState.weight[path[i][0]][path[i][1]];
     }
     this.setState({
       timer, searchSize, pathCost

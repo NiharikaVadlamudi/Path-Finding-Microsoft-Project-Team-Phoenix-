@@ -11,17 +11,23 @@ import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import ModalBody from 'react-bootstrap/ModalBody';
 import ModalFooter from 'react-bootstrap/ModalFooter';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Slider from '@material-ui/core/Slider';
+
 
 function assert(condition, message) {
   if (!condition) {
       throw message || "Assertion failed";
   }
 }
+
 class Grid extends Component {
   state = {
-    rows: Math.ceil(window.innerHeight / 30),
-    cols: Math.ceil(window.innerWidth / 30),
+    rows: Math.ceil(window.innerHeight / 35),
+    cols: Math.ceil(window.innerWidth / 35),
     status: [],
+    weight: [],
     startLoc: undefined,
     targetLoc: undefined,
     drawAllowed: true,
@@ -36,15 +42,22 @@ class Grid extends Component {
     showModal: false,
     ModalMessage: "",
     Analysis: undefined,
+    weightVal: 25,
+    minWeight: 2,
+    maxWeight: 50,
+
   }
 
   constructor() {
     super();
     let status = [];
+    let weight = [];
     for (let r = 0; r < this.state.rows; r++) {
       status[r] = [];
+      weight[r] = [];
       for (let c = 0; c < this.state.cols; c++) {
-        status[r][c] = 0;
+        status[r][c] = glob.emptyId;
+        weight[r][c] = glob.emptyWeightId;
       }
     }
     let r = Math.ceil(this.state.rows / 6)
@@ -55,6 +68,7 @@ class Grid extends Component {
     status[r][c] = glob.startId
     status[r * 4][c * 4] = glob.targetId
     this.state.status = status;
+    this.state.weight = weight;
     this.tempStartLoc = this.state.startLoc
     this.tempTargetLoc = this.state.targetLoc
     this.anyDrawUpdates = false;
@@ -92,19 +106,30 @@ class Grid extends Component {
   }
 
   getBoard = () => {
-    const { rows, cols, status } = this.state;
+    const { rows, cols, status, weight } = this.state;
     const tr = [];
     for (let r = 0; r < rows; r++) {
       const td = [];
       for (let c = 0; c < cols; c++) {
-        td.push(
-          <td
+        let temp = undefined
+        if(status[r][c] === glob.weightId || status[r][c] === glob.visAndWeightId || status[r][c] === glob.pathAndWeightId)
+        {
+          temp = <td
             id={`${r}, ${c}`}
             className={this.getTdClassName(status[r][c])}
             onMouseOver={() => { return this.props.isMouseDown ? this.handleCellClick(r, c) : false }}
             onMouseDown={() => { this.handleCellClick(r, c) }}
-          />
-        )
+          >{weight[r][c]}</td>
+        }
+        else {
+          temp = <td
+            id={`${r}, ${c}`}
+            className={this.getTdClassName(status[r][c])}
+            onMouseOver={() => { return this.props.isMouseDown ? this.handleCellClick(r, c) : false }}
+            onMouseDown={() => { this.handleCellClick(r, c) }}
+          > 01 </td>
+        }
+        td.push(temp)
       }
       tr.push(<tr key={r}>{td}</tr>);
     }
@@ -131,10 +156,19 @@ class Grid extends Component {
     assert(this.anyDrawUpdates, "Trying to push 0 updates")
 
     const clone = JSON.parse(JSON.stringify(this.state.status));
+    const clone2 = JSON.parse(JSON.stringify(this.state.weight));
     let startLoc = undefined, targetLoc = undefined;
     for (let r = 0; r < this.state.rows; r++) {
       for (let c = 0; c < this.state.cols; c++) {
           clone[r][c] = this.getTdClassName(document.getElementById(`${r}, ${c}`).className, true)
+          if(clone[r][c] === glob.weightId && clone2[r][c] === glob.emptyWeightId )
+          {
+            clone2[r][c] = this.state.weightVal
+          }
+          else if(clone2[r][c] !== glob.emptyWeightId && !(clone[r][c] === glob.weightId || clone[r][c] === glob.visAndWeightId || clone[r][c] === glob.pathAndWeightId) )
+          {
+            clone2[r][c] = glob.emptyWeightId
+          }
           if(clone[r][c] == glob.startId){
             startLoc = [r, c];
           }
@@ -150,19 +184,21 @@ class Grid extends Component {
     assert(targetLoc[0] === this.tempTargetLoc[0] && targetLoc[1] === this.tempTargetLoc[1], "Target out of sync" + targetLoc + " " + this.tempTargetLoc)
     assert(!this.anyDrawUpdates, "Updates not pushed")
 
-    this.setState({ 
+    this.setState({
       status: clone,
+      weight: clone2,
       startLoc: startLoc,
       targetLoc: targetLoc
-    }); 
+    });
   }
 
   handleCellClick = (r, c) => {
     if (!this.state.drawAllowed) return;
     if (!this.state.isEmptyVis && this.state.drawMode != -1)
       this.clearLastAlgo();
-    
+
     const curCell = document.getElementById(`${r}, ${c}`);
+    console.log(curCell.innerHTML)
     switch (this.state.drawMode) {
       case glob.wallButtonId:
         if(curCell.className === this.getTdClassName(glob.emptyId)){
@@ -191,9 +227,11 @@ class Grid extends Component {
       case glob.weightButtonId:
         if(curCell.className === this.getTdClassName(glob.emptyId)){
           curCell.className = this.getTdClassName(glob.weightId);
+          curCell.innerHTML = this.state.weightVal
         }
         else if(curCell.className === this.getTdClassName(glob.weightId)){
           curCell.className = this.getTdClassName(glob.emptyId);
+          curCell.innerHTML = '01'
         }
         break;
 
@@ -314,6 +352,13 @@ class Grid extends Component {
   setModalValues = (message) => {
     this.setState({ showModal: true, ModalMessage: message })
   }
+
+  handleWeightChange = (e,v) =>
+  {
+    this.setState({weightVal: v})
+    console.log(v)
+  }
+
   render() {
     // console.log("grid", this.state.drawAllowed)
 
@@ -330,6 +375,15 @@ class Grid extends Component {
           {this.state.drawButtons.map(
             el => <Button key={el.id} el={el} onSelectOption={this.handleSelectDrawMode} />
           )}
+          <Slider style={{width: 300,  paddingLeft: 10}}
+             defaultValue={25}
+             disabled={!this.state.drawAllowed}
+             step={1}
+             min={this.state.minWeight}
+             max={this.state.maxWeight}
+             valueLabelDisplay="on"
+             onChange={this.handleWeightChange}
+          />
         </span>
 
         <Container fluid style={{ paddingLeft: 0, paddingRight: 0 }}>
@@ -363,6 +417,10 @@ class Grid extends Component {
                 <div className="d-flex p-2">
                   <div className="legend visWeight"></div>
                   <div>Visited weight</div>
+                </div>
+                <div className="d-flex p-2">
+                  <div className="legend path"></div>
+                  <div>Path</div>
                 </div>
                 <div className="d-flex p-2">
                   <div></div>

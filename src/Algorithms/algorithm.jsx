@@ -6,6 +6,7 @@ class Algorithm {
     constructor(graph, neigh, heur) {
         // setting up some parameters and variables
         this.status = graph.gridState.status
+        this.weight = graph.gridState.weight
         this.beg = graph.gridState.startLoc
         this.end = graph.gridState.targetLoc
         this.rows = this.status.length
@@ -22,7 +23,7 @@ class Algorithm {
 
     getActualDist(par, cur) {
         // get distance between neighbours
-        return this.status[cur[0]][cur[1]] === glob.weightId ? glob.weightVal : glob.normalVal;
+        return this.status[cur[0]][cur[1]] === glob.weightId ? this.weight[cur[0]][cur[1]] : glob.normalVal;
     }
 
     chooseHeuristic(heur) {
@@ -83,10 +84,10 @@ class Algorithm {
         }
         this.orderVisited = this.orderVisited.reverse()
         this.orderVisited.pop()
-        
+
         // find the path
         this.getPath()
-        
+
         return this
     }
 

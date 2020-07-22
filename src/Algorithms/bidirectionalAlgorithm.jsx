@@ -4,11 +4,12 @@ class BidirectionalAlgorithm {
 
         // setting up some params and variables
         this.status = graph.gridState.status
+        this.weight = graph.gridState.weight
         this.beg = graph.gridState.startLoc
         this.end = graph.gridState.targetLoc
         this.rows = this.status.length
         this.cols = this.status[0].length
-        
+
         this.par = []
         for (let i = 0; i < this.rows; i++) {
             this.par[i] = []
@@ -16,12 +17,12 @@ class BidirectionalAlgorithm {
                 this.par[i][j] = [i, j]
             }
         }
-        
+
         this.f = 0;
         this.orderVisited = []
         this.path = []
         this.meetingPoint = undefined
-        this.timeTaken = 0; 
+        this.timeTaken = 0;
     }
 
     getPath() {

@@ -4,6 +4,7 @@ export default {
     targetButtonId: 3,
     weightButtonId: 4,
 
+    emptyWeightId: -1,
     emptyId: 0,
     wallId: 1,
     startId: 2,

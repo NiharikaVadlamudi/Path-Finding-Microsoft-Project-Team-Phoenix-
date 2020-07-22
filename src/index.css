@@ -13,44 +13,58 @@ code {
 }
 
 .cell {
-  height:20px;
-  width:20px;
+  height:25px;
+  width:25px;
   border: 1px solid black;
+  font-size:10px;
+  text-align: center;
+  font-weight: bold;
 }
 
 td.wall{
   background-color: #0000ff;
+  color: #0000ff;
 }
 
 td.empty{
   background-color: aqua;
+  color: aqua;
 }
 
 td.start{
   background-color: red;
+  color: red;
 }
 
 td.target{
   background-color: green;
+  color: green;
 }
 
 td.weight{
   background-color: blueviolet;
+  color: black;
+
 }
 
 td.vis{
   background-color: grey;
+  color: grey;
 }
 
 td.visWeight{
   background-color: purple;
+  color: black;
 }
 
 td.path{
   background-color: pink;
+  color: pink;
 }
 td.pathWeight{
   background-color: hotpink;
+  color: black;
+
 }
 
 div.legend {
@@ -58,7 +72,7 @@ div.legend {
   width: 20px;
   height: 20px;
   margin: 5px;
-  border: 1px solid rgba(0, 0, 0, .2);
+  border: 3px solid rgba(0, 0, 0, .2);
 }
 
 div.wall{
@@ -87,4 +101,8 @@ div.vis{
 
 div.visWeight{
   background-color: purple;
+}
+
+div.path{
+  background-color: pink;
 }
