@@ -12,8 +12,8 @@ class NavBar extends Component {
         return (
             <nav className="navbar navbar-expand-sm bg-dark navbar-dark">
                 <ul className="navbar-nav">
-                    <li className="nav-item active">
-                        <h2 style={{color: 'white'}} align='center'>PathFinder</h2>
+                    <li className="nav-item active ">
+                        <h2 style={{color: 'white'}} align='center'>Phoenix PathFinder</h2>
                     </li>
                 </ul>
             </nav>
