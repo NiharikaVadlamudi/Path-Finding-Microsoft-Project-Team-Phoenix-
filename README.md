@@ -29,4 +29,5 @@ Followed: `https://blog.miguelgrinberg.com/post/how-to-create-a-react--flask-pro
   - yarn install
   - yarn start
 - Go to `localhost:3000` to access the web-app.
+<br>
 Hosted using heroku at https://phoenixpathfinder.herokuapp.com/
