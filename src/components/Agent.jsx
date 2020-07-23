@@ -284,7 +284,7 @@ class Agent extends Component {
     let pauseOverlay = <Button el={this.state.pauseResumeButton} onSelectOption={this.handlePauseResume} />
     if(this.state.startStopButton.status === false)
     {
-      pauseOverlay = this.buttonOverlays("Cannot clear board while algorithm is in Search mode", pauseOverlay )
+      pauseOverlay = this.buttonOverlays("Pause disabled when Algorithm is not running", pauseOverlay )
     }
     let searchOverlay = <Button el={this.state.startStopButton} onSelectOption={this.handleStartStop} />
     if(this.props.gridState.targetLoc === undefined || this.props.gridState.startLoc === undefined || this.state.algo === undefined)
