@@ -27,7 +27,6 @@ export default {
 
     searchPhaseId : 1,
     designPhaseId : -1,
-    // clearBoardButtonId : 3,
 
     startStopButtonId:1,
     pauseResumeButtonId:2,

@@ -16,6 +16,8 @@ import ModalFooter from 'react-bootstrap/ModalFooter';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Tooltip from 'react-bootstrap/Tooltip'
 
 
 function assert(condition, message) {
@@ -41,6 +43,7 @@ class Grid extends Component {
       { id: glob.targetButtonId, label: "EDIT TARGET", status: false, disable: false },
       { id: glob.weightButtonId, label: "ADD WEIGHT", status: false, disable: false },
     ],
+    clearWallsButton: { id: glob.clearWallsButtonId, label: "CLEAR BOARD", status: false },
     showModal: false,
     ModalMessage: "",
     Analysis: undefined,
@@ -435,7 +438,7 @@ class Grid extends Component {
           {
             if(Math.abs(50 - Math.abs(y-j))%2 === 0)
             {
-              clone2[i][j] =  Math.abs(50 - Math.abs(y-j)) 
+              clone2[i][j] =  Math.abs(50 - Math.abs(y-j))
               clone[i][j] = glob.weightId
             }
           }
@@ -461,6 +464,24 @@ class Grid extends Component {
     }
   }
 
+  buttonOverlays = (message, button) =>
+  {
+    let buttonOverlay = <OverlayTrigger
+    placement="left"
+    delay={{ show: 250, hide: 400 }}
+    overlay={
+      <Tooltip id="button-tooltip" {...this.props} >
+        {message}
+      </Tooltip>
+    }
+    ><div>
+    {button}
+    </div>
+    </OverlayTrigger>
+    return buttonOverlay
+  }
+
+
   render() {
     // console.log("grid", this.state.drawAllowed)
 
@@ -468,6 +489,11 @@ class Grid extends Component {
 
     if (this.state.Analysis != undefined) {
       analysis = this.state.Analysis
+    }
+    let clearBoardOverlay = <Button el={this.state.clearWallsButton} onSelectOption={this.handleClearWalls} />
+    if(this.state.drawAllowed==false)
+    {
+      clearBoardOverlay = this.buttonOverlays("Cannot clear board while algorithm is in Search mode", clearBoardOverlay )
     }
 
     return (
@@ -480,6 +506,8 @@ class Grid extends Component {
           {this.state.drawButtons.map(
             el => <Button key={el.id} el={el} onSelectOption={this.handleSelectDrawMode} />
           )}
+          {clearBoardOverlay}
+
 
           <Dropdown>
             <Dropdown.Toggle className="badge m-2 badge-dark" id="dropdown-basic">
@@ -566,10 +594,11 @@ class Grid extends Component {
                 handleStep={this.handleStep}
                 handleChecks={this.handleChecks}
                 clearLastAlgo={this.clearLastAlgo}
-                handleclearWalls={this.handleClearWalls}
+                handleClearWalls={this.handleClearWalls}
                 handleAlgo={this.handleAlgo}
                 setModalValues={this.setModalValues}
                 setAnalysis={this.setAnalysis}
+                buttonOverlays={this.buttonOverlays}
               />
             </Col>
           </Row>

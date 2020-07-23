@@ -30,7 +30,6 @@ class Agent extends Component {
       algo: undefined,
       startStopButton: { id: glob.startSearchButtonId, label: "SEARCH", status: false },
       pauseResumeButton: { id: glob.pauseResumeButtonId, label: "PAUSE", status: false, disable: true },
-      clearWallsButton: { id: glob.clearWallsButtonId, label: "CLEAR WALLS / PATH", status: false },
       period: 5,
       neigh: undefined,
       heur: undefined,
@@ -262,39 +261,18 @@ class Agent extends Component {
     clearInterval(this.periodicStep);
   }
 
-  buttonOverlays = (message, button) =>
-  {
-    let buttonOverlay = <OverlayTrigger
-    placement="left"
-    delay={{ show: 250, hide: 400 }}
-    overlay={
-      <Tooltip id="button-tooltip" {...this.props} >
-        {message}
-      </Tooltip>
-    }
-    ><div>
-    {button}
-    </div>
-    </OverlayTrigger>
-    return buttonOverlay
-  }
 
 
   render() {
     let pauseOverlay = <Button el={this.state.pauseResumeButton} onSelectOption={this.handlePauseResume} />
     if(this.state.startStopButton.status === false)
     {
-      pauseOverlay = this.buttonOverlays("Pause disabled when Algorithm is not running", pauseOverlay )
+      pauseOverlay = this.props.buttonOverlays("Pause disabled when Algorithm is not running", pauseOverlay )
     }
     let searchOverlay = <Button el={this.state.startStopButton} onSelectOption={this.handleStartStop} />
     if(this.props.gridState.targetLoc === undefined || this.props.gridState.startLoc === undefined || this.state.algo === undefined)
     {
-      searchOverlay = this.buttonOverlays("Algorithm not selected", searchOverlay )
-    }
-    let clearBoardOverlay = <Button el={this.state.clearWallsButton} onSelectOption={this.props.handleclearWalls} />
-    if(this.state.startStopButton.status)
-    {
-      clearBoardOverlay = this.buttonOverlays("Cannot clear board while algorithm is in Search mode", clearBoardOverlay )
+      searchOverlay = this.props.buttonOverlays("Algorithm not selected", searchOverlay )
     }
 
     return (
@@ -335,7 +313,6 @@ class Agent extends Component {
       {searchOverlay}
       {pauseOverlay}
       </div>
-      {clearBoardOverlay}
 
 
 

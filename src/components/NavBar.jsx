@@ -15,15 +15,6 @@ class NavBar extends Component {
                     <li className="nav-item active">
                         <h2 style={{color: 'white'}} align='center'>PathFinder</h2>
                     </li>
-                    {/* <li className="nav-item">
-                        <a className="nav-link" href="#">Link</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className="nav-link" href="#">Link</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className="nav-link disabled" href="#">Disabled</a>
-                    </li> */}
                 </ul>
             </nav>
         );
