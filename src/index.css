@@ -21,47 +21,48 @@ code {
   font-weight: bold;
 }
 
-td.wall{
+.wall{
   background-color: #0000ff;
   color: #0000ff;
 }
 
-td.empty{
+.empty{
   background-color: aqua;
   color: aqua;
 }
 
-td.start{
+.start{
   background-color: red;
   color: red;
 }
 
-td.target{
+.target{
   background-color: green;
   color: green;
 }
 
-td.weight{
+.weight{
   background-color: blueviolet;
   color: black;
+  border: 1px solid black;
 
 }
 
-td.vis{
+.vis{
   background-color: grey;
   color: grey;
 }
 
-td.visWeight{
+.visWeight{
   background-color: purple;
   color: black;
 }
 
-td.path{
+.path{
   background-color: pink;
   color: pink;
 }
-td.pathWeight{
+.pathWeight{
   background-color: hotpink;
   color: black;
 
@@ -69,40 +70,38 @@ td.pathWeight{
 
 div.legend {
   float: left;
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   margin: 5px;
   border: 3px solid rgba(0, 0, 0, .2);
 }
 
-div.wall{
-  background-color: #0000ff;
+.row-div {
+  display: flex;
+justify-content: center;
 }
 
-div.empty{
-  background-color: aqua;
+.legendLabel {
+  font-size: 15px
 }
 
-div.start{
-  background-color: red;
+.vertAlign{
+  vertical-align: middle;
 }
 
-div.target{
-  background-color: green;
+.horAlign{
+  text-align:right;
 }
 
-div.weight{
-  background-color: blueviolet;
+.nobreak {
+  display: inline;
+  white-space: nowrap;
 }
 
-div.vis{
-  background-color: grey;
-}
-
-div.visWeight{
-  background-color: purple;
-}
-
-div.path{
-  background-color: pink;
+.listBox{
+        display:inline-block;
+        /* border:1px solid #000; */
+        padding:10px;
+         width: 200px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }

@@ -220,7 +220,7 @@ class Agent extends Component {
                 if(path.length == 0)
                 {
                   this.setState({ showAnalysis:true})
-                  let analysis = <ul className="list-group list-group-flush">
+                  let analysis = <ul className="list-group list-group-flush listBox">
                   <li className="list-group-item">Time: {this.state.timer} ms</li>
                   <li className="list-group-item">Cost: {this.state.pathCost}</li>
                   <li className="list-group-item">Search Space: {this.state.searchSize}</li>
@@ -313,7 +313,7 @@ class Agent extends Component {
         )}
 
 
-      <Modal aria-labelledby="contained-modal-title-vcenter" style={{opacity: 1}} centered show={this.state.showAnalysis} onHide={this.handleShowAnalysis}>
+    {/*  <Modal aria-labelledby="contained-modal-title-vcenter" style={{opacity: 1}} centered show={this.state.showAnalysis} onHide={this.handleShowAnalysis}>
         <Modal.Header closeButton>
           <Modal.Title>Algorithm Analysis</Modal.Title>
         </Modal.Header>
@@ -323,17 +323,18 @@ class Agent extends Component {
         <li className="list-group-item">Time: {this.state.timer} ms</li>
         <li className="list-group-item">Cost: {this.state.pathCost}</li>
         <li className="list-group-item">Search Space: {this.state.searchSize}</li>
-        {/* <li className="list-group-item">Normal node cost: </li>
-        <li className="list-group-item">Weighted node cost: </li> */}
+        <li className="list-group-item">Normal node cost: </li>
+        <li className="list-group-item">Weighted node cost: </li>
         </ul>
 
         </Modal.Body>
 
-      </Modal>
+      </Modal>*/}
 
-
+      <div className="row" style={{ paddingLeft:20 , paddingRight: 0 }}>
       {searchOverlay}
       {pauseOverlay}
+      </div>
       {clearBoardOverlay}
 
 

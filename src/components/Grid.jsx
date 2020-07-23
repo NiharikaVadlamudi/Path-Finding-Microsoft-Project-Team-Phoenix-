@@ -5,6 +5,8 @@ import Agent from "./Agent.jsx"
 import Row from 'react-bootstrap/Row'
 import Container from 'react-bootstrap/Container'
 import Col from 'react-bootstrap/Col'
+import DropdownButton from 'react-bootstrap/DropdownButton'
+import Dropdown from 'react-bootstrap/Dropdown'
 import Modal from 'react-bootstrap/Modal';
 import ModalDialog from 'react-bootstrap/ModalDialog';
 import ModalHeader from 'react-bootstrap/ModalHeader';
@@ -116,6 +118,7 @@ class Grid extends Component {
         {
           temp = <td
             id={`${r}, ${c}`}
+
             className={this.getTdClassName(status[r][c])}
             onMouseOver={() => { return this.props.isMouseDown ? this.handleCellClick(r, c) : false }}
             onMouseDown={() => { this.handleCellClick(r, c) }}
@@ -359,6 +362,105 @@ class Grid extends Component {
     console.log(v)
   }
 
+  drawRandomBoard = () =>
+  {
+    const clone = JSON.parse(JSON.stringify(this.state.status));
+    const clone2 = JSON.parse(JSON.stringify(this.state.weight));
+    // const clone = JSON.parse(JSON.stringify(this.state.status));
+    for (let i = 0; i < this.state.rows; i++) {
+      for (let j = 0; j < this.state.cols; j++) {
+        if (clone[i][j] !== glob.startId && clone[i][j] !== glob.targetId && clone[i][j] !== glob.emptyId)
+          clone[i][j] = glob.emptyId;
+      }
+    }
+    for (let i = 0; i < this.state.rows; i++) {
+      for (let j = 0; j < this.state.cols; j++) {
+        if (clone[i][j] !== glob.startId && clone[i][j] !== glob.targetId && clone[i][j] === glob.emptyId)
+        {
+          if(Math.random() < 0.3 )
+          {
+            if(Math.random() < 0.5)
+            clone[i][j] = glob.wallId;
+            else {
+              clone[i][j] = glob.weightId;
+              clone2[i][j] = Math.floor(Math.random() * Math.floor(48)) + 2
+            }
+          }
+        }
+      }
+    }
+    this.setState({ status: clone, weight:clone2 });
+  }
+
+
+
+  drawContourBoard = (c) =>
+  {
+    const clone = JSON.parse(JSON.stringify(this.state.status));
+    const clone2 = JSON.parse(JSON.stringify(this.state.weight));
+    // const clone = JSON.parse(JSON.stringify(this.state.status));
+    for (let i = 0; i < this.state.rows; i++) {
+      for (let j = 0; j < this.state.cols; j++) {
+        if (clone[i][j] !== glob.startId && clone[i][j] !== glob.targetId && clone[i][j] !== glob.emptyId)
+          clone[i][j] = glob.emptyId;
+      }
+    }
+
+    let x=undefined;
+    let y=undefined;
+    if(!c)
+    {
+      x=this.state.startLoc[0]
+      y=this.state.startLoc[1]
+    }
+    else {
+      x=this.state.targetLoc[0]
+      y=this.state.targetLoc[1]
+    }
+
+    for (let i = 0; i < this.state.rows; i++) {
+      for (let j = 0; j < this.state.cols; j++) {
+        if (clone[i][j] !== glob.startId && clone[i][j] !== glob.targetId && clone[i][j] === glob.emptyId)
+        {
+          if(Math.abs(x-i) > Math.abs(j-y))
+          {
+            if(Math.abs(50 - Math.abs(x-i))%2 === 0)
+            {
+              clone2[i][j] = Math.abs(50 - Math.abs(x-i))
+              clone[i][j] = glob.weightId
+            }
+
+          }
+          else
+          {
+            if(Math.abs(50 - Math.abs(y-j))%2 === 0)
+            {
+              clone2[i][j] =  Math.abs(50 - Math.abs(y-j)) 
+              clone[i][j] = glob.weightId
+            }
+          }
+        }
+      }
+    }
+
+    this.setState({ status: clone, weight:clone2 });
+
+
+  }
+
+  drawCustomGrid = (e) => {
+    if(this.state.drawAllowed)
+    {
+      switch(e){
+        case "1": this.drawRandomBoard(); break;
+        case "2": this.drawContourBoard(0); break;
+        case "3": this.drawContourBoard(1); break;
+        default : break;
+      }
+
+    }
+  }
+
   render() {
     // console.log("grid", this.state.drawAllowed)
 
@@ -371,71 +473,91 @@ class Grid extends Component {
     return (
 
       <React.Fragment>
-        <span>
+        <span >
+        <div className="row" style={{ paddingLeft: 15, paddingRight: 0 }}>
+
+
           {this.state.drawButtons.map(
             el => <Button key={el.id} el={el} onSelectOption={this.handleSelectDrawMode} />
           )}
-          <Slider style={{width: 300,  paddingLeft: 10}}
-             defaultValue={25}
-             disabled={!this.state.drawAllowed}
-             step={1}
-             min={this.state.minWeight}
-             max={this.state.maxWeight}
-             valueLabelDisplay="on"
-             onChange={this.handleWeightChange}
-          />
+
+          <Dropdown>
+            <Dropdown.Toggle className="badge m-2 badge-dark" id="dropdown-basic">
+              CUSTOM GRID
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu >
+              <Dropdown.Item eventKey="1" onSelect={this.drawCustomGrid}>Random</Dropdown.Item>
+              <Dropdown.Item eventKey="2" onSelect={this.drawCustomGrid}>Start centric contour</Dropdown.Item>
+              <Dropdown.Item eventKey="3" onSelect={this.drawCustomGrid}>Target centric contour</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
         </span>
+
 
         <Container fluid style={{ paddingLeft: 0, paddingRight: 0 }}>
           <Row noGutters className="justify-content-md-left">
             <Col xs={{ span: 4, offset: 0 }} md={{ span: 2, offset: 0 }}>
               <div className="d-flex flex-column flex-wrap m-2" style={{ width: '100%' }}>
                 <div className="d-flex p-2">
-                  <div className="legend wall"></div>
-                  <div> Wall</div>
-                </div>
-                <div className="d-flex p-2">
                   <div className="legend start"></div>
-                  <div>Start</div>
+                  <div className="legendLabel">Start</div>
                 </div>
                 <div className="d-flex p-2">
                   <div className="legend target">    </div>
-                  <div>Target</div>
+                  <div className="legendLabel">Target</div>
+                </div>
+                <div className="d-flex p-2">
+                <div className="legend wall"></div>
+                <div className="legendLabel"> Wall</div>
                 </div>
                 <div className="d-flex p-2">
                   <div className="legend weight"></div>
-                  <div>Weights</div>
+                  <div className="legendLabel">Weights</div>
                 </div>
                 <div className="d-flex p-2">
                   <div className="legend vis"></div>
-                  <div>Visited</div>
+                  <div className="legendLabel">Visited</div>
                 </div>
                 <div className="d-flex p-2">
                   <div className="legend empty"></div>
-                  <div>Not Visited</div>
+                  <div className="legendLabel">Not Visited</div>
                 </div>
                 <div className="d-flex p-2">
                   <div className="legend visWeight"></div>
-                  <div>Visited weight</div>
+                  <div className="legendLabel">Visited weight</div>
                 </div>
                 <div className="d-flex p-2">
                   <div className="legend path"></div>
-                  <div>Path</div>
+                  <div className="legendLabel">Path</div>
                 </div>
                 <div className="d-flex p-2">
                   <div></div>
-                  <div>Rows: {this.state.rows}</div>
+                  <div className="legendLabel">Rows: {this.state.rows}</div>
                 </div>
                 <div className="d-flex p-2">
                   <div></div>
-                  <div>Columns: {this.state.cols}</div>
+                  <div className="legendLabel">Columns: {this.state.cols}</div>
                 </div>
                 {analysis}
               </div>
 
             </Col>
             <Col xs={{ span: 10, offset: 1 }} md={{ span: 7, offset: 0 }}>
-              {this.getBoard()}
+              <div className="horAlign" style={{paddingLeft: 20}}>
+              Weight : &emsp;
+                <Slider className="vertAlign" style={{width: 300}}
+                   defaultValue={25}
+                   disabled={!this.state.drawAllowed}
+                   step={1}
+                   min={this.state.minWeight}
+                   max={this.state.maxWeight}
+                   valueLabelDisplay="on"
+                   onChange={this.handleWeightChange}
+                />
+                </div>
+                {this.getBoard()}
             </Col>
             <Col xs={{ span: 2, offset: 1 }} md={{ span: 2, offset: 1 }}>
               <Agent

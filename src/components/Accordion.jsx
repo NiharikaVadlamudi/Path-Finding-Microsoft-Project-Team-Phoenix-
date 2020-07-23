@@ -135,7 +135,7 @@ class AccordionElement extends Component {
                 </Grid>
                 <Grid item style={{ color:  '#7c7a79', fontSize: '13px',}}>On</Grid>
                 </Grid>
-                <hr/>
+                
                 </div>
     }
     return (
