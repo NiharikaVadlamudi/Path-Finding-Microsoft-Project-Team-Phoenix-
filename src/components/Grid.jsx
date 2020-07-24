@@ -169,7 +169,7 @@ class Grid extends Component {
           clone[r][c] = this.getTdClassName(document.getElementById(`${r}, ${c}`).className, true)
           if(clone[r][c] === glob.weightId && clone2[r][c] === glob.emptyWeightId )
           {
-            clone2[r][c] = document.getElementById(`${r}, ${c}`).innerHTML
+            clone2[r][c] = this.state.weightVal
           }
           else if(clone2[r][c] !== glob.emptyWeightId && !(clone[r][c] === glob.weightId || clone[r][c] === glob.visAndWeightId || clone[r][c] === glob.pathAndWeightId) )
           {
