@@ -223,6 +223,19 @@ class Agent extends Component {
             algoItems = undefined
 
             this.handleAnalysisUpdate(timer, orderVisited.length, path)
+            let pathCost = 0;
+            for(let i = 0; i < path.length; i++){
+              pathCost += this.props.gridState.status[path[i][0]][path[i][1]] === glob.emptyId ? glob.normalVal : this.props.gridState.weight[path[i][0]][path[i][1]];
+            }
+            this.setState({ showAnalysis:true})
+            let analysis = <ul className="list-group list-group-flush listBox">
+            <li className="list-group-item">Time: {timer} ms</li>
+            <li className="list-group-item">Cost: {pathCost}</li>
+            <li className="list-group-item">Search Space: {orderVisited.length}</li>
+            {/* <li className="list-group-item">Normal node cost: </li>
+            <li className="list-group-item">Weighted node cost: </li> */}
+            </ul>;
+            this.props.setAnalysis(analysis);
 
             this.periodicStep = setInterval(() => {
               if (orderVisited.length !== 0 && !pause) {
@@ -234,15 +247,6 @@ class Agent extends Component {
               else if (orderVisited.length === 0) {
                 if(path.length == 0)
                 {
-                  this.setState({ showAnalysis:true})
-                  let analysis = <ul className="list-group list-group-flush listBox">
-                  <li className="list-group-item">Time: {this.state.timer} ms</li>
-                  <li className="list-group-item">Cost: {this.state.pathCost}</li>
-                  <li className="list-group-item">Search Space: {this.state.searchSize}</li>
-                  {/* <li className="list-group-item">Normal node cost: </li>
-                  <li className="list-group-item">Weighted node cost: </li> */}
-                  </ul>;
-                  this.props.setAnalysis(analysis);
                   this.algoEnd();
                 }
                 else if(!pause){
@@ -375,11 +379,11 @@ class Agent extends Component {
 
       </Modal>
 
-      <div className="row" style={{ paddingLeft:20 , paddingRight: 0 }}>
+      <div className="row" style={{ paddingLeft:12 , paddingRight: 0 }}>
       {searchOverlay}
       {pauseOverlay}
       </div>
-      <div className="row" style={{ paddingLeft:50 , paddingRight: 0 }}>
+      <div className="row" style={{ paddingLeft:48 , paddingRight: 0 }}>
       {tutorialOverlay}
       </div>
 

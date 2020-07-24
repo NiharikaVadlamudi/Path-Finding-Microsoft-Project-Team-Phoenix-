@@ -169,7 +169,7 @@ class Grid extends Component {
           clone[r][c] = this.getTdClassName(document.getElementById(`${r}, ${c}`).className, true)
           if(clone[r][c] === glob.weightId && clone2[r][c] === glob.emptyWeightId )
           {
-            clone2[r][c] = this.state.weightVal
+            clone2[r][c] = document.getElementById(`${r}, ${c}`).innerHTML
           }
           else if(clone2[r][c] !== glob.emptyWeightId && !(clone[r][c] === glob.weightId || clone[r][c] === glob.visAndWeightId || clone[r][c] === glob.pathAndWeightId) )
           {
@@ -204,7 +204,7 @@ class Grid extends Component {
       this.clearLastAlgo();
 
     const curCell = document.getElementById(`${r}, ${c}`);
-    console.log(curCell.innerHTML)
+    // console.log(curCell.innerHTML)
     switch (this.state.drawMode) {
       case glob.wallButtonId:
         if(curCell.className === this.getTdClassName(glob.emptyId)){
@@ -362,7 +362,7 @@ class Grid extends Component {
   handleWeightChange = (e,v) =>
   {
     this.setState({weightVal: v})
-    console.log(v)
+    // console.log(v)
   }
 
   drawRandomBoard = () =>

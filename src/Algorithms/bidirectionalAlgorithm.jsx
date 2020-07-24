@@ -26,7 +26,7 @@ class BidirectionalAlgorithm {
     }
 
     getPath() {
-        console.log(this.meetingPoint, this.f)
+        // console.log(this.meetingPoint, this.f)
         // failure case
         if (this.f !== 1)
             return;
