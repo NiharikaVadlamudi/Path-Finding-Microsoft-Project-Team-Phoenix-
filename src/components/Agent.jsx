@@ -316,7 +316,7 @@ class Agent extends Component {
         <Modal.Header closeButton>
           <Modal.Title>Tutorial</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{height:'500px'}}>
 
         <ul className="list-group list-group-flush">
         <li className="list-group-item">

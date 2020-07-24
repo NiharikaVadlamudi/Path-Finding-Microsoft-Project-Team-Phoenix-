@@ -429,8 +429,10 @@ class Grid extends Component {
           {
             if(Math.abs(50 - Math.abs(x-i))%2 === 0)
             {
-              clone2[i][j] = Math.abs(50 - Math.abs(x-i))
+              clone2[i][j] = Math.abs(50 - Math.abs(x-i))%50
               clone[i][j] = glob.weightId
+              if(clone2[i][j] === 0)
+                clone2[i][j] = 2
             }
 
           }
@@ -438,8 +440,10 @@ class Grid extends Component {
           {
             if(Math.abs(50 - Math.abs(y-j))%2 === 0)
             {
-              clone2[i][j] =  Math.abs(50 - Math.abs(y-j))
+              clone2[i][j] =  Math.abs(50 - Math.abs(y-j))%50
               clone[i][j] = glob.weightId
+              if(clone2[i][j] === 0)
+                clone2[i][j] = 2
             }
           }
         }
