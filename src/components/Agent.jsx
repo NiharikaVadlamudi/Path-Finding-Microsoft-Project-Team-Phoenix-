@@ -30,6 +30,7 @@ class Agent extends Component {
       algo: undefined,
       startStopButton: { id: glob.startSearchButtonId, label: "SEARCH", status: false },
       pauseResumeButton: { id: glob.pauseResumeButtonId, label: "PAUSE", status: false, disable: true },
+      tutorialButton: { id: glob.tutorialButtonId, label: "Tutorial", status: false, disable: false },
       period: 5,
       neigh: undefined,
       heur: undefined,
@@ -45,6 +46,7 @@ class Agent extends Component {
       searchSize: 0,
       pathCost: 0,
       showAnalysis: false,
+      showTutorial: true,
 
     }
     this.order = [];
@@ -98,6 +100,15 @@ class Agent extends Component {
     }
   }
 
+  handleTutorial = () => {
+    if(!this.state.startStopButton.status)
+    {
+      var tutorialButton = JSON.parse(JSON.stringify(this.state.tutorialButton));
+      tutorialButton.status = !tutorialButton.status;
+      this.setState({ tutorialButton, showTutorial:true });
+    }
+  }
+
   togglePauseDisable = () => {
     var pauseResumeButton = JSON.parse(JSON.stringify(this.state.pauseResumeButton));
     pauseResumeButton.disable = !pauseResumeButton.disable;
@@ -145,6 +156,11 @@ class Agent extends Component {
   handleShowAnalysis = () =>
   {
     this.setState({showAnalysis:false});
+  }
+
+  handleShowTutorial = () =>
+  {
+    this.setState({showTutorial:false});
   }
 
 
@@ -274,6 +290,11 @@ class Agent extends Component {
     {
       searchOverlay = this.props.buttonOverlays("Algorithm not selected", searchOverlay )
     }
+    let tutorialOverlay = <Button el={this.state.tutorialButton} onSelectOption={this.handleTutorial} />
+    if(this.state.startStopButton.status)
+    {
+      tutorialOverlay = this.props.buttonOverlays("Cannot display while Algorithm is in Search phase ", tutorialOverlay )
+    }
 
     return (
       <span>
@@ -291,29 +312,76 @@ class Agent extends Component {
         )}
 
 
-    {/*  <Modal aria-labelledby="contained-modal-title-vcenter" style={{opacity: 1}} centered show={this.state.showAnalysis} onHide={this.handleShowAnalysis}>
+      <Modal aria-labelledby="contained-modal-title-vcenter" style={{opacity: 1 }} size="lg" centered show={this.state.showTutorial} onHide={this.handleShowTutorial}>
         <Modal.Header closeButton>
-          <Modal.Title>Algorithm Analysis</Modal.Title>
+          <Modal.Title>Tutorial</Modal.Title>
         </Modal.Header>
         <Modal.Body>
 
         <ul className="list-group list-group-flush">
-        <li className="list-group-item">Time: {this.state.timer} ms</li>
-        <li className="list-group-item">Cost: {this.state.pathCost}</li>
-        <li className="list-group-item">Search Space: {this.state.searchSize}</li>
-        <li className="list-group-item">Normal node cost: </li>
-        <li className="list-group-item">Weighted node cost: </li>
+        <li className="list-group-item">
+          <div>
+            1. Editing the Board: <br/><br/>
+              <div className="tutBody">
+              You can add walls, weights and edit the positions of the start and target button using the controls given in the top right.
+              You can choose a grid from the Custom grid dropdown and make changes to it. <br/> <br/>
+              </div>
+              <div className="centerAlign">
+              <img src="../editBoard.png" alt= "edit" width="650" className="center"/>
+              </div>
+          </div>
+        </li>
+        <li className="list-group-item">
+          <div>
+            2. Weights: <br/><br/>
+              <div className="tutBody">
+              The value of weights can be set using the slider. Select the add weights option to draw on the board. The value of the
+              weight drawn is shown on the cell. <br/> <br/>
+              </div>
+              <div className="centerAlign">
+              <img src="../weightSlider.png" alt= "weight" className="center"/><br/> <br/>
+              <img src="../weight.png" alt= "weight" width="650" height="475" className="center"/><br/> <br/>
+              </div>
+          </div>
+        </li>
+        <li className="list-group-item">
+          <div>
+            3. Choosing an algorithm: <br/><br/>
+              <div className="tutBody">
+              Click on the Accordion to select an algorithm . You can select the distance metric and the number of neighbours to consider
+              while searching. Enable bi-directional search to see the algorithm start from both the start and target. <br/> <br/>
+              </div>
+              <div className="centerAlign">
+              <img src="../ChooseAlgo.png" alt= "Algo" width="200" className="center"/><br/> <br/>
+              </div>
+          </div>
+        </li>
+        <li className="list-group-item">
+          <div>
+            4. Analysis<br/><br/>
+              <div className="tutBody">
+              You can see how long the algorithm took and other information on the left of the grid under the legend. <br/> <br/>
+              </div>
+              <div className="centerAlign">
+              <img src="../analysis.png" alt= "Analysis" className="center"/><br/> <br/>
+              </div>
+          </div>
+        </li>
+
+
         </ul>
 
         </Modal.Body>
 
-      </Modal>*/}
+      </Modal>
 
       <div className="row" style={{ paddingLeft:20 , paddingRight: 0 }}>
       {searchOverlay}
       {pauseOverlay}
       </div>
-
+      <div className="row" style={{ paddingLeft:50 , paddingRight: 0 }}>
+      {tutorialOverlay}
+      </div>
 
 
 

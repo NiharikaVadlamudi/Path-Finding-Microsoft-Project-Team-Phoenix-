@@ -31,6 +31,7 @@ export default {
     startStopButtonId:1,
     pauseResumeButtonId:2,
     clearWallsButtonId:3,
+    tutorialButtonId:4,
 
     ManhattanId: 1,
     EuclideanId: 2,

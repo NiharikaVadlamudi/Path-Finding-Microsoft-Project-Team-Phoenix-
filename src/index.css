@@ -85,12 +85,33 @@ justify-content: center;
   font-size: 15px
 }
 
+.modal{
+    display: block !important; /* I added this to see the modal, you don't need this */
+}
+
+/* Important part */
+.modal-dialog{
+    overflow-y: initial !important
+}
+.modal-body{
+    height: 500px;
+    overflow-y: auto;
+}
+
 .vertAlign{
   vertical-align: middle;
 }
 
 .horAlign{
   text-align:right;
+}
+.centerAlign{
+  text-align:center;
+}
+
+.tutBody{
+  font-size: 15px;
+  color: #7c7a79;
 }
 
 .nobreak {
