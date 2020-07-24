@@ -1,6 +1,3 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-
 /*
  * Implementation of all distance metrics that will be useful for alogorithms.
  1.Euclidien Distance
@@ -40,36 +37,34 @@ export function chebychevMetric(a, b,D1=1,D2=1)
 
 // Octile Distance
 
-export function octileMetric(x1,y1,x2,y2,D1=1,D2=Math.sqrt(2))
+export function octileMetric(a, b,D1=1,D2=Math.sqrt(2))
 {
-    const dx=Math.abs(x1-x2)
-    const dy=Math.abs(y1-y2)
+    const dx=Math.abs(a[0]-b[0])
+    const dy=Math.abs(a[1]-b[1])
     return ( D1*(dx+dy) + (D2-2*D1)*(Math.min(dx,dy)) )
 }
 
 // Vancouver Distance
-export function vancouverMetric(x1,y1,x2,y2)
-{
-    var x = Math.abs(x1-x2)
-    var y = Math.abs(y1-y2)
-    var correction=0;
+// export function vancouverMetric(x1,y1,x2,y2)
+// {
+//     var x = Math.abs(x1-x2)
+//     var y = Math.abs(y1-y2)
+//     var correction=0;
 
-    if(x%2!=0)
-    {
-        if(y1<y2)
-        {
-        correction=x1%2
-        }
-        else
-        {
-            correction=x2%2
-        }
-    }
-    else{
-        correction=0
-    }
-    var vdistance= Math.max(0,y-Math.floor(x/2)+x-correction)
-    return(vdistance)
-}
-
-// EOD (More metrics will be added )
+//     if(x%2!=0)
+//     {
+//         if(y1<y2)
+//         {
+//         correction=x1%2
+//         }
+//         else
+//         {
+//             correction=x2%2
+//         }
+//     }
+//     else{
+//         correction=0
+//     }
+//     var vdistance= Math.max(0,y-Math.floor(x/2)+x-correction)
+//     return(vdistance)
+// }

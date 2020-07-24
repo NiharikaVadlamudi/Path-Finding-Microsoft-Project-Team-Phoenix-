@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 class Button extends Component {
 
     render() {
-        let classes = "badge m-2 badge-";
+        let classes = "btn btn-sm m-2 btn-";
         if(this.props.el.disable === true)
         {
           classes += "secondary";

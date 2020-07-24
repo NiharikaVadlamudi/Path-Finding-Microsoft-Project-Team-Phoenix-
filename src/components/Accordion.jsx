@@ -30,7 +30,8 @@ class AccordionElement extends Component {
       this.state.heuristics = [
         { value: glob.ManhattanId, label: "Manhattan", info: glob.manhattanInfo },
         { value: glob.EuclideanId, label: "Euclidean", info: glob.euclideanInfo },
-        { value: glob.VancouverId, label: "Vancouver", info: glob.vancouverInfo },
+        { value: glob.ChebyshevId, label: "Chebyshev", info: glob.chebyshevInfo },
+        { value: glob.OctileId, label: "Octile", info: glob.octileInfo },
       ];
       this.state.selectedHeuristic = this.state.heuristics[0]
     }

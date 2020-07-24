@@ -514,7 +514,7 @@ class Grid extends Component {
 
 
           <Dropdown>
-            <Dropdown.Toggle className="badge m-2 badge-dark" id="dropdown-basic">
+            <Dropdown.Toggle className="btn m-2 btn-sm btn-dark" id="dropdown-basic">
               CUSTOM GRID
             </Dropdown.Toggle>
 

@@ -35,7 +35,8 @@ export default {
 
     ManhattanId: 1,
     EuclideanId: 2,
-    VancouverId: 3,
+    ChebyshevId: 3,
+    OctileId: 4,
 
     weightVal: 10,
     normalVal: 1,
@@ -52,5 +53,6 @@ export default {
 
     manhattanInfo: "M",
     euclideanInfo: "E",
-    vancouverInfo: "V",
+    octileInfo: "O",
+    chebyshevInfo: "C"
 }

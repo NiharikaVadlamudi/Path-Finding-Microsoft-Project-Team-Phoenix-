@@ -1,5 +1,5 @@
 import glob from "../components/global.jsx"
-import { euclideanMetric, manhattanMetric, vancouverMetric } from './metrics.js';
+import { euclideanMetric, manhattanMetric, chebychevMetric, octileMetric } from './metrics.js';
 
 class Algorithm {
 
@@ -31,7 +31,8 @@ class Algorithm {
         switch (heur) {
             case glob.ManhattanId: return manhattanMetric;
             case glob.EuclideanId: return euclideanMetric;
-            case glob.VancouverId: return vancouverMetric;
+            case glob.ChebyshevId: return chebychevMetric;
+            case glob.OctileId: return octileMetric;
             default: break;
         }
     }
